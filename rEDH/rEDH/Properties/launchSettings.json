@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "rEDH (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "rEDH (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

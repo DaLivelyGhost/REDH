@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Window
+    x:Class="rEDH.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:rEDH"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="layoutRoot">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <Border Background="#B2BEB5"/>
+        <Border Grid.Column ="1" Background="#E5E4E2"/>
+
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Padding="20">
+            
+            <TextBlock Foreground="Black" FontSize="25" Text="Hello, world!" HorizontalAlignment="Center"/>
+            
+            <Grid x:Name="checkBoxGrid" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="5*"/>
+                    <RowDefinition Height="5*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Foreground="Black" FontSize="10*" Text="White" VerticalAlignment="Center"
+                           Grid.Column="0" Grid.Row="0"/>
+                <TextBlock Foreground="Black" FontSize="10*" Text="Blue" VerticalAlignment="Center"
+                           Grid.Column="1" Grid.Row="0"/>
+                <TextBlock Foreground="Black" FontSize="10*" Text="Black" VerticalAlignment="Center"
+                           Grid.Column="2" Grid.Row="0"/>
+                <TextBlock Foreground="Black" FontSize="10*" Text="Red" VerticalAlignment="Center"
+                           Grid.Column="3" Grid.Row="0"/>
+                <TextBlock Foreground="Black" FontSize="10*" Text="Green" VerticalAlignment="Center"
+                           Grid.Column="4" Grid.Row="0"/>
+                
+                <CheckBox x:Name="whiteCheckBox"
+                          Grid.Column="0" Grid.Row="1"/>
+                <CheckBox x:Name="blueCheckBox"
+                          Grid.Column="1" Grid.Row="1"/>
+                <CheckBox x:Name="blackCheckBox"
+                          Grid.Column="2" Grid.Row="1"/>
+                <CheckBox x:Name="redCheckBox"
+                          Grid.Column="3" Grid.Row="1"/>
+                <CheckBox x:Name="greenCheckBox"
+                          Grid.Column="4" Grid.Row="1"/>
+
+            </Grid>
+ 
+            <Button x:Name="generateButton" HorizontalAlignment="Center" 
+                    Content="Generate Deck" Foreground="Black" Background="#D3D3D3"
+                    Click="generateButtonClick">
+                
+            </Button>
+            
+        </StackPanel>
+
+        <Grid x:Name="deckView" MinWidth="1000" MinHeight="3000" HorizontalAlignment="Center" Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                </Grid.ColumnDefinitions>
+                
+            <Border Background="White"/>
+
+            <ScrollViewer Visibility="Visible"/>
+
+
+        </Grid>
+        
+
+    </Grid>
+
+</Window>
