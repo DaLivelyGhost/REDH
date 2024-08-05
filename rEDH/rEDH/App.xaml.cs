@@ -19,9 +19,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Protection.PlayReady;
-using Newtonsoft;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -33,6 +31,12 @@ namespace rEDH
     /// </summary>
     public partial class App : Application
     {
+
+        private Window m_window;
+        private CardList cardList;
+        private ApiWrangler wrangler;
+
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -40,7 +44,7 @@ namespace rEDH
         public App()
         {
             this.InitializeComponent();
-            testQuery();
+           
         }
 
         /// <summary>
@@ -49,63 +53,20 @@ namespace rEDH
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            m_window = new MainWindow();
+            this.wrangler = new ApiWrangler();
+            this.cardList = new CardList();
+
+            m_window = new MainWindow(wrangler, cardList, this);
             m_window.Activate();
   
         }
-        public async void testQuery()
+
+        public void demoCard()
         {
-            httpClient = new HttpClient();
-            
-            //----Headers
-            var appInfo = new ProductInfoHeaderValue("rEDH", "0.1");
-            var acceptInfo = new MediaTypeWithQualityHeaderValue("application/json");
-
-            httpClient.DefaultRequestHeaders.UserAgent.Add(appInfo);
-            httpClient.DefaultRequestHeaders.Accept.Add(acceptInfo);
-
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.scryfall.com/cards/random");
-            var response = await httpClient.SendAsync(request);
-
-
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                var newCard = JsonConvert.DeserializeObject<Card>(jsonString);
-            }
-            else
-            {
-                String error = response.StatusCode.ToString() + " " + response.ReasonPhrase.ToString();
-                Console.WriteLine(error);
-            }
+            wrangler.testQuery(cardList);
         }
-        private Window m_window;
 
-        private HttpClient httpClient;
-    }
-    
-    public static class Const
-    {
-        public const string searchURL = "https://api.scryfall.com/cards/search";
-        public const string randomURL = "https://api.scryfall.com/cards/random";
+
     }
 
-    [Serializable]
-    public class Card
-    {
-        [JsonPropertyName("name")]
-        public string name { get; set; }
-
-        [JsonPropertyName("mana_cost")]
-        public string mana_cost {  get; set; }
-
-        [JsonPropertyName("cmc")]
-        public float cmc {  get; set; }
-    }
-    [Serializable]
-    public class CardList
-    {
-        
-        public IEnumerable<Card> Cards { get; set; }
-    }
 }

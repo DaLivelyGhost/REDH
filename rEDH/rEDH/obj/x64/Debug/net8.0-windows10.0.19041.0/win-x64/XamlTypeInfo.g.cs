@@ -282,7 +282,6 @@ namespace rEDH.rEDH_XamlTypeInfo
         }
 
         private object Activate_0_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
-        private object Activate_4_MainWindow() { return new global::rEDH.MainWindow(); }
         private object Activate_6_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
@@ -330,7 +329,6 @@ namespace rEDH.rEDH_XamlTypeInfo
 
             case 4:   //  rEDH.MainWindow
                 userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
-                userType.Activator = Activate_4_MainWindow;
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;

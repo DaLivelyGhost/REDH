@@ -25,16 +25,15 @@ namespace rEDH
     /// </summary>
     public sealed partial class MainWindow : Window
     {
-
-
-        public MainWindow()
+        App controller;
+        public MainWindow(ApiWrangler wrangler, CardList cardList, App controller)
         {
             this.InitializeComponent();
-            
+            this.controller = controller;
         }
         void generateButtonClick(object sender, RoutedEventArgs e)
         {
-           
+            controller.demoCard();
         }
         public void demoPopulate()
         {
