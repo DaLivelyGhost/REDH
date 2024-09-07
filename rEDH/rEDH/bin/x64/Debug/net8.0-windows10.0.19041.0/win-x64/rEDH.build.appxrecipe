@@ -592,6 +592,9 @@
     <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\microsoft.windows.sdk.net.ref\10.0.19041.31\lib\net6.0\WinRT.Runtime.dll">
       <PackagePath>WinRT.Runtime.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\microsoft.data.sqlite.core\8.0.8\lib\net8.0\Microsoft.Data.Sqlite.dll">
+      <PackagePath>Microsoft.Data.Sqlite.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\microsoft.windowsappsdk\1.5.240627000\lib\net6.0-windows10.0.18362.0\Microsoft.InteractiveExperiences.Projection.dll">
       <PackagePath>Microsoft.InteractiveExperiences.Projection.dll</PackagePath>
     </AppxPackagedFile>
@@ -640,11 +643,38 @@
     <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\newtonsoft.json\13.0.3\lib\net6.0\Newtonsoft.Json.dll">
       <PackagePath>Newtonsoft.Json.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\sqlitepclraw.bundle_e_sqlite3\2.1.6\lib\netstandard2.0\SQLitePCLRaw.batteries_v2.dll">
+      <PackagePath>SQLitePCLRaw.batteries_v2.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\sqlitepclraw.core\2.1.6\lib\netstandard2.0\SQLitePCLRaw.core.dll">
+      <PackagePath>SQLitePCLRaw.core.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\sqlitepclraw.provider.e_sqlite3\2.1.6\lib\net6.0-windows7.0\SQLitePCLRaw.provider.e_sqlite3.dll">
+      <PackagePath>SQLitePCLRaw.provider.e_sqlite3.dll</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\microsoft.windowsappsdk\1.5.240627000\runtimes\win-x64\native\Microsoft.WindowsAppRuntime.Bootstrap.dll">
       <PackagePath>Microsoft.WindowsAppRuntime.Bootstrap.dll</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\combs\.nuget\packages\sqlitepclraw.lib.e_sqlite3\2.1.6\runtimes\win-x64\native\e_sqlite3.dll">
+      <PackagePath>e_sqlite3.dll</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\blb-369-plains.jpg">
+      <PackagePath>Assets\blb-369-plains.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\blb-371-island.jpg">
+      <PackagePath>Assets\blb-371-island.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\blb-373-swamp.jpg">
+      <PackagePath>Assets\blb-373-swamp.jpg</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\blb-375-mountain.jpg">
       <PackagePath>Assets\blb-375-mountain.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\blb-377-forest.jpg">
+      <PackagePath>Assets\blb-377-forest.jpg</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\cmm-1055-wastes.jpg">
+      <PackagePath>Assets\cmm-1055-wastes.jpg</PackagePath>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>

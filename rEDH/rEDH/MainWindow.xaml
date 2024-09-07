@@ -15,7 +15,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Border Background="#B2BEB5"/>
+        <Border Grid.Column ="0" Background="#B2BEB5"/>
         <Border Grid.Column ="1" Background="#E5E4E2"/>
 
         <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Padding="20">
@@ -64,10 +64,12 @@
                     Click="generateButtonClick">
                 
             </Button>
-            
-        </StackPanel>
 
-        <Grid x:Name="deckView" MinWidth="1000" MinHeight="3000" HorizontalAlignment="Center" Grid.Column="1">
+
+        </StackPanel>
+        
+        <Grid x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"
+              MinWidth="1000" MinHeight="1000" Grid.Column="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
@@ -75,10 +77,18 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                
-            <Border Background="White"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <Border Background="White" Grid.RowSpan="10" Grid.ColumnSpan="5"/>
+            <Image x:Name="imageTestBlue" Grid.Column="0"/>
+            <Image x:Name="imageTestRed" Grid.Column="1"/>
+            <Image x:Name="imageTestWhite" Grid.Column="2"/>
+            <Image x:Name="imageTestBlack"  Grid.Column="3"/>
+            <Image x:Name="imageTestGreen" Grid.Column="4"/>
+            <Image x:Name="imageTestColorless" Grid.Column="0" Grid.Row="1"/>
 
-            <ScrollViewer Visibility="Visible"/>
 
 
         </Grid>

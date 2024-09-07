@@ -27,32 +27,37 @@ namespace rEDH
         ProductInfoHeaderValue appInfo = new ProductInfoHeaderValue("rEDH", "0.1");
         MediaTypeWithQualityHeaderValue acceptInfo = new MediaTypeWithQualityHeaderValue("application/json");
         
-        
-        //----Methods
-        public async void testQuery(CardList cardList)
+        public ApiWrangler()
         {
-            httpClient = new HttpClient();
-          
+            this.httpClient = new HttpClient();
+        }
+        
+
+        //----Methods
+        public async Task<Card> testQuery()
+        {
+            //add headers
             httpClient.DefaultRequestHeaders.UserAgent.Add(appInfo);
             httpClient.DefaultRequestHeaders.Accept.Add(acceptInfo);
 
             var request = new HttpRequestMessage(HttpMethod.Get, "https://api.scryfall.com/cards/random");
             var response = await httpClient.SendAsync(request);
 
-
             if (response.IsSuccessStatusCode)
             {
                 var jsonString = await response.Content.ReadAsStringAsync();
-                var newCard = JsonConvert.DeserializeObject<Card>(jsonString);
-
-                cardList.addCard(newCard);
-                demoDownloadCardArt(newCard, response);
+                Card newCard = JsonConvert.DeserializeObject<Card>(jsonString);
+                
+                return newCard;
+                //demoDownloadCardArt(newCard, response);
                 
             }
             else
             {
                 String error = response.StatusCode.ToString() + " " + response.ReasonPhrase.ToString();
                 Console.WriteLine(error);
+
+                return null;
             }
         }
         public async void demoDownloadCardArt(Card card, HttpResponseMessage response)
@@ -68,10 +73,10 @@ namespace rEDH
             string fileName = "newCard";
             string directoryPath = "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH";
             var path = Path.Combine(directoryPath, $"{fileName}{fileExtension}");
-
+            //card.image_uris.setLocalAddress(path);
 
             var imageBytes = await httpClient.GetByteArrayAsync(tempUri);
-            await File.WriteAllBytesAsync(path, imageBytes);
+            //await File.WriteAllBytesAsync(card.image_uris.getLocalAddress(), imageBytes);
 
         }
 

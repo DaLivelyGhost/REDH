@@ -11,9 +11,12 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using static System.Net.WebRequestMethods;
+using System.Drawing;
+using Microsoft.UI.Xaml.Media.Imaging;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -31,13 +34,19 @@ namespace rEDH
             this.InitializeComponent();
             this.controller = controller;
         }
-        void generateButtonClick(object sender, RoutedEventArgs e)
+        async void generateButtonClick(object sender, RoutedEventArgs e)
         {
-            controller.demoCard();
+            Task<Card> taskCard = controller.demoCard();
+            Card newCard = await taskCard;
+            demoPopulate(newCard);
         }
-        public void demoPopulate()
+        public void demoPopulate(Card card)
         {
+            BitmapImage bit = new BitmapImage();
 
+            bit.UriSource = new Uri(card.image_uris.normal);
+
+            imageTestBlue.Source = bit;
         }
 
 

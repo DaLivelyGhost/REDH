@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Xaml;
+﻿
+using Microsoft.Data.Sqlite;
+using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Data;
@@ -14,6 +16,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
@@ -34,8 +37,8 @@ namespace rEDH
 
         private Window m_window;
         private CardList cardList;
-        private ApiWrangler wrangler;
-
+        private ApiWrangler apiWrangler;
+        private DatabaseWrangler databaseWrangler;
 
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
@@ -53,17 +56,26 @@ namespace rEDH
         /// <param name="args">Details about the launch request and process.</param>
         protected override void OnLaunched(Microsoft.UI.Xaml.LaunchActivatedEventArgs args)
         {
-            this.wrangler = new ApiWrangler();
+            this.apiWrangler = new ApiWrangler();
+            this.databaseWrangler = new DatabaseWrangler();
             this.cardList = new CardList();
 
-            m_window = new MainWindow(wrangler, cardList, this);
+            m_window = new MainWindow(apiWrangler, cardList, this);
             m_window.Activate();
   
         }
 
-        public void demoCard()
+        public async Task<Card> demoCard()
         {
-            wrangler.testQuery(cardList);
+            //query scryfall and deserialize json into card
+            Task<Card> cardTask = apiWrangler.testQuery();
+            Card newCard = await cardTask;
+
+            //add card object to database and query card back for demo purposes
+            databaseWrangler.addCard(newCard);
+            Card databaseCard = databaseWrangler.getCardByName(newCard.name);
+            
+            return databaseCard;
         }
 
 
