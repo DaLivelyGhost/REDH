@@ -29,7 +29,7 @@
     <AppXManifest Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2024-09-07T22:07:43.643</Modified>
+      <Modified>2024-09-09T00:58:04.591</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
@@ -43,11 +43,11 @@
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\rEDH.dll">
       <PackagePath>rEDH.dll</PackagePath>
-      <Modified>2024-09-07T22:07:43.410</Modified>
+      <Modified>2024-09-09T00:58:04.288</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\apphost.exe">
       <PackagePath>rEDH.exe</PackagePath>
-      <Modified>2024-09-07T22:07:43.416</Modified>
+      <Modified>2024-09-09T00:58:04.293</Modified>
     </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\rEDH.deps.json">
       <PackagePath>rEDH.deps.json</PackagePath>

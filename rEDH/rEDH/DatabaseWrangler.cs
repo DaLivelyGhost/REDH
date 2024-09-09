@@ -65,12 +65,13 @@ namespace rEDH
         public Card getCardByName(string name)
         {
             string fetchCard = selectString;
+            Card toReturn = new Card();
 
             foreach (string s in cardtypeStrings)
             {
                 fetchCard += s;
-                fetchCard += " WHERE " + s + " name = '" + name + "';";
-                //command.Parameters.AddWithValue("'$name'", name);
+                fetchCard += " WHERE " + " name = '" + name + "';";
+                
 
                 command = new SqliteCommand(fetchCard, connection);
                 SqliteDataReader reader = command.ExecuteReader();
@@ -80,13 +81,19 @@ namespace rEDH
                     System.Diagnostics.Debug.WriteLine(reader[0].ToString() + " | " +
                                                         reader[1].ToString() + " | " +
                                                         reader[2].ToString());
-                }    
+                    toReturn.name = reader[0].ToString();
+                    toReturn.cmc = float.Parse(reader[1].ToString());
+                    toReturn.image_uris.normal = reader[2].ToString();
+                }
                 
+
                 //reset query string
                 fetchCard = selectString;
-            }          
+            }
+            System.Diagnostics.Debug.WriteLine(toReturn.name + " / " + toReturn.cmc.ToString()
+                                                + " / " + toReturn.image_uris.normal);
 
-            return null;
+            return toReturn;
         }
         public void closeDatabase()
         {

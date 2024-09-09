@@ -12,6 +12,11 @@ namespace rEDH
     [Serializable]
     public class Card
     {
+        public Card()
+        {
+            image_uris = new cardImages();
+        }
+
 
         [JsonPropertyName("name")]
         public string name { get; set; }
