@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace rEDH
 {
+    /// <summary>
+    /// Object full of card objects which represents the decklist. 
+    /// </summary>
     [Serializable]
     public class CardList
     {

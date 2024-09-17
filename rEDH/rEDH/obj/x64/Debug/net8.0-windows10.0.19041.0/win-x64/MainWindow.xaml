@@ -46,15 +46,15 @@
                 <TextBlock Foreground="Black" FontSize="10*" Text="Green" VerticalAlignment="Center"
                            Grid.Column="4" Grid.Row="0"/>
                 
-                <CheckBox x:ConnectionId='12' x:Name="whiteCheckBox"
+                <CheckBox x:ConnectionId='13' x:Name="whiteCheckBox"
                           Grid.Column="0" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='13' x:Name="blueCheckBox"
+                <CheckBox x:ConnectionId='14' x:Name="blueCheckBox"
                           Grid.Column="1" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='14' x:Name="blackCheckBox"
+                <CheckBox x:ConnectionId='15' x:Name="blackCheckBox"
                           Grid.Column="2" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='15' x:Name="redCheckBox"
+                <CheckBox x:ConnectionId='16' x:Name="redCheckBox"
                           Grid.Column="3" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='16' x:Name="greenCheckBox"
+                <CheckBox x:ConnectionId='17' x:Name="greenCheckBox"
                           Grid.Column="4" Grid.Row="1"/>
 
             </Grid>
@@ -64,8 +64,10 @@
                                                >
                 
             </Button>
-
-
+            <Button x:ConnectionId='12' x:Name="databaseButton" HorizontalAlignment="Center"
+                    Content="Update Database" Foreground="Black" Background="White"
+                                                     >
+            </Button>
         </StackPanel>
         
         <Grid x:ConnectionId='3' x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"

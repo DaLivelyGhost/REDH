@@ -63,8 +63,59 @@ namespace rEDH
             m_window = new MainWindow(apiWrangler, cardList, this);
             m_window.Activate();
   
-        }
+        }   
+        
+        public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
+        {
+            bool[] checkboxes = { white, blue, black, red, green };
+            
+            //ask apiwrangler to query scryfall for cards
+            Task<ApiList> apilisttask = apiWrangler.queryCards(checkboxes);
+            ApiList list = await apilisttask;
 
+            bool firstPage = true;
+
+            //now that we have the list of cards, store them in the database.
+            do
+            {
+                if(!firstPage && list.has_more)
+                {
+                    apilisttask = apiWrangler.QueryFromURI(list.next_page);
+                    list = await apilisttask;
+                    await Task.Delay(100);
+                }
+
+                foreach(Card c in list.data)
+                {
+                    databaseWrangler.addCard(c);
+                }
+
+
+            } while (list.has_more);
+            System.Diagnostics.Debug.WriteLine("Done!");
+            //now that they've been logged in the database, we can begin deck building algorithms
+
+            //DECK BUILDING ALGORITHMS GO HERE
+
+            //now display the list of card objects in the ui
+        }
+        public async void updateDatabase()
+        {
+            //get a byte array representing all the cards on scryfall
+            Task<byte[]> byteArrayTask = apiWrangler.queryBulkData();
+            byte[] bytes = await byteArrayTask;
+
+            //get a local string to the assets folder
+            string assetsDir = AppDomain.CurrentDomain.BaseDirectory + "Assets\\";
+            System.Diagnostics.Debug.WriteLine(assetsDir);
+
+            string filePath = assetsDir + "ScryFallBulk.json";
+
+            //save all the cards on scryfall to the assets folder as a json
+            File.WriteAllBytes(filePath, bytes);
+            System.Diagnostics.Debug.WriteLine("Done!");
+
+        }
         public async Task<Card> demoCard()
         {
             //query scryfall and deserialize json into card

@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 using Windows.UI.Input.Inking;
 
 namespace rEDH
-{
+{   
+    /// <summary>
+    ///  Object that handles the local database of cards.
+    /// </summary>
     public class DatabaseWrangler
     {
         private SqliteConnection connection;

@@ -64,8 +64,10 @@
                     Click="generateButtonClick">
                 
             </Button>
-
-
+            <Button x:Name="databaseButton" HorizontalAlignment="Center"
+                    Content="Update Database" Foreground="Black" Background="White"
+                    Click="updateDatabaseButtonClick">
+            </Button>
         </StackPanel>
         
         <Grid x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"

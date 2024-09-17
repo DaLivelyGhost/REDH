@@ -36,9 +36,16 @@ namespace rEDH
         }
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
-            Task<Card> taskCard = controller.demoCard();
-            Card newCard = await taskCard;
-            demoPopulate(newCard);
+            controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
+                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
+
+            //Task<Card> taskCard = controller.demoCard();
+            //Card newCard = await taskCard;
+            //demoPopulate(newCard);
+        }
+        async void updateDatabaseButtonClick(object sender, RoutedEventArgs e)
+        {
+            controller.updateDatabase();
         }
         public void demoPopulate(Card card)
         {
