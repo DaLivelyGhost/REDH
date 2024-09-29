@@ -7,6 +7,10 @@ using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
+///<summary>
+///Object representing card objects.
+///Image URIs are images representing the card's art. Not stored locally, and are streamed from scryfall.
+/// </summary>
 namespace rEDH
 {
     [Serializable]
@@ -21,8 +25,19 @@ namespace rEDH
         [JsonPropertyName("name")]
         public string name { get; set; }
 
+        private string manaCost;
         [JsonPropertyName("mana_cost")]
-        public string mana_cost { get; set; }
+        public string mana_cost {
+            get => manaCost; 
+            set
+            {
+                manaCost = value;
+            }
+        }
+        public List<string> card_color;
+
+        [JsonPropertyName("color_identity")]
+        public string[] color_identity {  get; set; } 
 
         [JsonPropertyName("cmc")]
         public float cmc { get; set; }
@@ -92,12 +107,14 @@ namespace rEDH
                 legendary = value;
             }
         }
-
-
+        [JsonPropertyName("layout")]
+        public string layout { get; set; }
 
 
         [JsonPropertyName("image_uris")]
         public cardImages image_uris { get; set; }
+        [JsonPropertyName("legalities")]
+        public formatLegalities legalities { get; set; } 
     }
     public class cardImages
     {
@@ -110,5 +127,16 @@ namespace rEDH
         [JsonPropertyName("large")]
         public string large {  get; set; }
 
+    }
+    public class formatLegalities
+    {
+        [JsonPropertyName("commander")]
+        public string commander { get; set; }
+
+        [JsonPropertyName("paupercommander")]
+        public string paupercommander {  get; set; }
+
+        [JsonPropertyName("predh")]
+        public string predh {  get; set; }
     }
 }

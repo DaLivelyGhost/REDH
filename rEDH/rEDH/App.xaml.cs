@@ -14,6 +14,9 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Newtonsoft;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -36,7 +39,7 @@ namespace rEDH
     {
 
         private Window m_window;
-        private CardList cardList;
+        private DeckList deckList;
         private ApiWrangler apiWrangler;
         private DatabaseWrangler databaseWrangler;
 
@@ -58,47 +61,47 @@ namespace rEDH
         {
             this.apiWrangler = new ApiWrangler();
             this.databaseWrangler = new DatabaseWrangler();
-            this.cardList = new CardList();
+            this.deckList = new DeckList();
 
-            m_window = new MainWindow(apiWrangler, cardList, this);
+            m_window = new MainWindow(apiWrangler, this);
             m_window.Activate();
   
         }   
         
-        public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
-        {
-            bool[] checkboxes = { white, blue, black, red, green };
+        //public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
+        //{
+        //    bool[] checkboxes = { white, blue, black, red, green };
             
-            //ask apiwrangler to query scryfall for cards
-            Task<ApiList> apilisttask = apiWrangler.queryCards(checkboxes);
-            ApiList list = await apilisttask;
+        //    //ask apiwrangler to query scryfall for cards
+        //    Task<ApiList> apilisttask = apiWrangler.queryCards(checkboxes);
+        //    ApiList list = await apilisttask;
 
-            bool firstPage = true;
+        //    bool firstPage = true;
 
-            //now that we have the list of cards, store them in the database.
-            do
-            {
-                if(!firstPage && list.has_more)
-                {
-                    apilisttask = apiWrangler.QueryFromURI(list.next_page);
-                    list = await apilisttask;
-                    await Task.Delay(100);
-                }
+        //    //now that we have the list of cards, store them in the database.
+        //    do
+        //    {
+        //        if(!firstPage && list.has_more)
+        //        {
+        //            apilisttask = apiWrangler.QueryFromURI(list.next_page);
+        //            list = await apilisttask;
+        //            await Task.Delay(100);
+        //        }
 
-                foreach(Card c in list.data)
-                {
-                    databaseWrangler.addCard(c);
-                }
+        //        foreach(Card c in list.data)
+        //        {
+        //            databaseWrangler.addCard(c);
+        //        }
 
 
-            } while (list.has_more);
-            System.Diagnostics.Debug.WriteLine("Done!");
-            //now that they've been logged in the database, we can begin deck building algorithms
+        //    } while (list.has_more);
+        //    System.Diagnostics.Debug.WriteLine("Done!");
+        //    //now that they've been logged in the database, we can begin deck building algorithms
 
-            //DECK BUILDING ALGORITHMS GO HERE
+        //    //DECK BUILDING ALGORITHMS GO HERE
 
-            //now display the list of card objects in the ui
-        }
+        //    //now display the list of card objects in the ui
+        //}
         public async void updateDatabase()
         {
             //get a byte array representing all the cards on scryfall
@@ -112,22 +115,30 @@ namespace rEDH
             string filePath = assetsDir + "ScryFallBulk.json";
 
             //save all the cards on scryfall to the assets folder as a json
+            System.Diagnostics.Debug.WriteLine("File Writing Start!");
             File.WriteAllBytes(filePath, bytes);
-            System.Diagnostics.Debug.WriteLine("Done!");
+            System.Diagnostics.Debug.WriteLine(" File Writing Done!");
 
+            //deserialize the now downloaded data into useable card objects.
+            Card[] cardList = JsonConvert.DeserializeObject<Card[]>(File.ReadAllText(filePath));
+
+            //Catalog cards from the array
+            System.Diagnostics.Debug.WriteLine("Cataloging Start!");
+            databaseWrangler.addCardsBulk(cardList);
+            System.Diagnostics.Debug.WriteLine("Cataloging Done!");
         }
-        public async Task<Card> demoCard()
-        {
-            //query scryfall and deserialize json into card
-            Task<Card> cardTask = apiWrangler.testQuery();
-            Card newCard = await cardTask;
+        //public async Task<Card> demoCard()
+        //{
+        //    //query scryfall and deserialize json into card
+        //    Task<Card> cardTask = apiWrangler.testQuery();
+        //    Card newCard = await cardTask;
 
-            //add card object to database and query card back for demo purposes
-            databaseWrangler.addCard(newCard);
-            Card databaseCard = databaseWrangler.getCardByName(newCard.name);
+        //    //add card object to database and query card back for demo purposes
+        //    databaseWrangler.addCard(newCard);
+        //    Card databaseCard = databaseWrangler.getCardByName(newCard.name);
             
-            return databaseCard;
-        }
+        //    return databaseCard;
+        //}
 
 
     }

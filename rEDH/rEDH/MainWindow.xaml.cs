@@ -29,15 +29,15 @@ namespace rEDH
     public sealed partial class MainWindow : Window
     {
         App controller;
-        public MainWindow(ApiWrangler wrangler, CardList cardList, App controller)
+        public MainWindow(ApiWrangler wrangler, App controller)
         {
             this.InitializeComponent();
             this.controller = controller;
         }
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
-            controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
-                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
+            //controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
+                                    //(bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
 
             //Task<Card> taskCard = controller.demoCard();
             //Card newCard = await taskCard;

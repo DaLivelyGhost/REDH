@@ -149,9 +149,12 @@ namespace rEDH
 
             if (response.IsSuccessStatusCode)
             {
+                //the returned object is a list of bulk objects.
                 var jsonString = await response.Content.ReadAsStringAsync();
                 BulkList bulkList = JsonConvert.DeserializeObject<BulkList>(jsonString);
 
+                //Now we query the URI from the 1st bulk object in the list as an array of bytes
+                //to be written to file.
                 request = new HttpRequestMessage(HttpMethod.Get, bulkList.data[0].download_uri);
                 response = await httpClient.SendAsync(request);
 
