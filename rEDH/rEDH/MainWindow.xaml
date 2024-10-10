@@ -18,10 +18,13 @@
         <Border Grid.Column ="0" Background="#B2BEB5"/>
         <Border Grid.Column ="1" Background="#E5E4E2"/>
 
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20" Padding="20">
-            
-            <TextBlock Foreground="Black" FontSize="25" Text="Hello, world!" HorizontalAlignment="Center"/>
-            
+
+        <TextBlock Foreground="Black" FontSize="25" Text="rEDH" 
+                       HorizontalAlignment="Center" VerticalAlignment="Top"/>
+        
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="2">
+            <TextBlock Foreground="Black" FontSize="18" Text="Color Identity" HorizontalAlignment="Center"/>
+
             <Grid x:Name="checkBoxGrid" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
@@ -58,40 +61,66 @@
                           Grid.Column="4" Grid.Row="1"/>
 
             </Grid>
- 
+
             <Button x:Name="generateButton" HorizontalAlignment="Center" 
                     Content="Generate Deck" Foreground="Black" Background="#D3D3D3"
                     Click="generateButtonClick">
-                
+
             </Button>
-            <Button x:Name="databaseButton" HorizontalAlignment="Center"
-                    Content="Update Database" Foreground="Black" Background="White"
-                    Click="updateDatabaseButtonClick">
-            </Button>
+
+
         </StackPanel>
+
+        
+        <StackPanel VerticalAlignment="Bottom">
+            <Button x:Name="databaseButton" HorizontalAlignment="Center"
+                        Content="Update Database" Foreground="Black" Background="White"
+                        Click="updateDatabaseButtonClick">
+            </Button>
+            <TextBlock x:Name="lastUpdatedText" Foreground="Black" Text="Last Updated: " FontSize="10*" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+
+
+        
+        
+        
+        
         
         <Grid x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"
               MinWidth="1000" MinHeight="1000" Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                </Grid.ColumnDefinitions>
+                
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="1*"/>
                 <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
             </Grid.RowDefinitions>
-            <Border Background="White" Grid.RowSpan="10" Grid.ColumnSpan="5"/>
-            <Image x:Name="imageTestBlue" Grid.Column="0"/>
-            <Image x:Name="imageTestRed" Grid.Column="1"/>
-            <Image x:Name="imageTestWhite" Grid.Column="2"/>
-            <Image x:Name="imageTestBlack"  Grid.Column="3"/>
-            <Image x:Name="imageTestGreen" Grid.Column="4"/>
-            <Image x:Name="imageTestColorless" Grid.Column="0" Grid.Row="1"/>
-
-
+            
+            <Border Background="White" Grid.RowSpan="20" Grid.ColumnSpan="5"/>
 
         </Grid>
         

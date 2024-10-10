@@ -679,6 +679,9 @@
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\LockScreenLogo.scale-200.png">
       <PackagePath>Assets\LockScreenLogo.scale-200.png</PackagePath>
     </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\null_image.jpg">
+      <PackagePath>Assets\null_image.jpg</PackagePath>
+    </AppxPackagedFile>
     <AppxPackagedFile Include="C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\Assets\SplashScreen.scale-200.png">
       <PackagePath>Assets\SplashScreen.scale-200.png</PackagePath>
     </AppxPackagedFile>

@@ -23,21 +23,28 @@ using Microsoft.UI.Xaml.Media.Imaging;
 
 namespace rEDH
 {
+
+   
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
     public sealed partial class MainWindow : Window
     {
         App controller;
+        private Image[] cardArray;
         public MainWindow(ApiWrangler wrangler, App controller)
         {
             this.InitializeComponent();
             this.controller = controller;
+
+            initializeCardImages();
         }
+
+        //-------Button Events--------------------------------------------
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
-            //controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
-                                    //(bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
+            controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
+                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
 
             //Task<Card> taskCard = controller.demoCard();
             //Card newCard = await taskCard;
@@ -45,18 +52,51 @@ namespace rEDH
         }
         async void updateDatabaseButtonClick(object sender, RoutedEventArgs e)
         {
-            controller.updateDatabase();
+           controller.updateDatabase();
         }
-        public void demoPopulate(Card card)
+        //-------End Button Events--------------------------------------
+
+        public void setUpdateTime()
         {
-            BitmapImage bit = new BitmapImage();
 
-            bit.UriSource = new Uri(card.image_uris.normal);
-
-            imageTestBlue.Source = bit;
         }
 
+        //public void demoPopulate(Card card)
+        //{
+        //    BitmapImage bit = new BitmapImage();
 
+        //    bit.UriSource = new Uri(card.image_uris.normal);
+
+        //    imageTestBlue.Source = bit;
+        //}
+
+        private void initializeCardImages()
+        {
+            cardArray = new Image[100];
+            int row = 0;
+            int col = 0;
+
+            for(int i = 0; i < 100; i++)
+            {
+                cardArray[i] = new Image();
+                cardArray[i].Width = 672;
+
+                cardArray[i].Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\null_image.jpg"));
+
+                deckView.Children.Add(cardArray[i]);
+
+                Grid.SetRow(cardArray[i], row);
+                Grid.SetColumn(cardArray[i], col);
+
+                col++;
+
+                if(col == 5)
+                {
+                    col = 0;
+                    row++;
+                }
+            }
+        }
 
     }
 

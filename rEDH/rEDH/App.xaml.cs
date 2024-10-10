@@ -65,45 +65,17 @@ namespace rEDH
 
             m_window = new MainWindow(apiWrangler, this);
             m_window.Activate();
-  
-        }   
-        
-        //public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
-        //{
-        //    bool[] checkboxes = { white, blue, black, red, green };
             
-        //    //ask apiwrangler to query scryfall for cards
-        //    Task<ApiList> apilisttask = apiWrangler.queryCards(checkboxes);
-        //    ApiList list = await apilisttask;
+        }
 
-        //    bool firstPage = true;
+        public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
+        {
 
-        //    //now that we have the list of cards, store them in the database.
-        //    do
-        //    {
-        //        if(!firstPage && list.has_more)
-        //        {
-        //            apilisttask = apiWrangler.QueryFromURI(list.next_page);
-        //            list = await apilisttask;
-        //            await Task.Delay(100);
-        //        }
-
-        //        foreach(Card c in list.data)
-        //        {
-        //            databaseWrangler.addCard(c);
-        //        }
-
-
-        //    } while (list.has_more);
-        //    System.Diagnostics.Debug.WriteLine("Done!");
-        //    //now that they've been logged in the database, we can begin deck building algorithms
-
-        //    //DECK BUILDING ALGORITHMS GO HERE
-
-        //    //now display the list of card objects in the ui
-        //}
+        }
         public async void updateDatabase()
         {
+            databaseWrangler.refreshTables();
+
             //get a byte array representing all the cards on scryfall
             Task<byte[]> byteArrayTask = apiWrangler.queryBulkData();
             byte[] bytes = await byteArrayTask;
@@ -122,10 +94,22 @@ namespace rEDH
             //deserialize the now downloaded data into useable card objects.
             Card[] cardList = JsonConvert.DeserializeObject<Card[]>(File.ReadAllText(filePath));
 
+            //Delete the JSON object to save space
+            File.Delete(filePath);
+
             //Catalog cards from the array
             System.Diagnostics.Debug.WriteLine("Cataloging Start!");
             databaseWrangler.addCardsBulk(cardList);
             System.Diagnostics.Debug.WriteLine("Cataloging Done!");
+
+            //set time last updated
+            string updateTime = DateTime.Now.ToString();
+
+            databaseWrangler.setTimeUpdated(updateTime);
+        }
+        public string getUpdateTime()
+        {
+            return null;
         }
         //public async Task<Card> demoCard()
         //{

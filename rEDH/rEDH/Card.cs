@@ -34,14 +34,36 @@ namespace rEDH
                 manaCost = value;
             }
         }
-        public List<string> card_color;
-
+        //----------------------------------------------------------------
+        //Color Identity
+        //----------------------------------------------------------------
+        [JsonIgnore]
+        private string[] colorIdentity { get; set; }
         [JsonPropertyName("color_identity")]
-        public string[] color_identity {  get; set; } 
+        public string[] color_identity {
+            get => colorIdentity; 
+            set
+            {
+                colorIdentity = value;
+                string arrayString = "";
 
+                foreach(string s in colorIdentity)
+                {
+                    arrayString += s;
+                }
+                color_identity_string = arrayString;
+            } 
+        
+        }
+        [JsonIgnore]
+        public string color_identity_string { get; set; }
+        //----------------------------------------------------------------
         [JsonPropertyName("cmc")]
         public float cmc { get; set; }
 
+        //----------------------------------------------------------------
+        //Card Type
+        //----------------------------------------------------------------
         private string typeLine;
         [JsonPropertyName("type_line")]
         public string type_line {
@@ -97,6 +119,7 @@ namespace rEDH
         }
         [JsonIgnore]
         public List<string> card_type { get; set; }
+        //----------------------------------------------------------------
 
         private bool legendary;
         [JsonIgnore]
@@ -110,7 +133,9 @@ namespace rEDH
         [JsonPropertyName("layout")]
         public string layout { get; set; }
 
-
+        //----------------------------------------------------------------
+        //Card Images
+        //----------------------------------------------------------------
         [JsonPropertyName("image_uris")]
         public cardImages image_uris { get; set; }
         [JsonPropertyName("legalities")]
