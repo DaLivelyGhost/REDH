@@ -221,7 +221,28 @@ namespace rEDH
             //    }
             //}
         }
-        
+        public Card queryCommander(string colorSearchToken)
+        {
+            string commandString = selectString + cardtypeStrings[2] + " WHERE isLegendary = 1 AND "
+                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
+
+            command = new SqliteCommand(commandString, connection);
+            SqliteDataReader reader = command.ExecuteReader();
+
+            Card newCommander = new Card();
+
+            while (reader.Read())
+            {
+                newCommander.name = reader[0].ToString();
+                newCommander.cmc = float.Parse(reader[1].ToString());
+                newCommander.mana_cost = reader[2].ToString();
+                newCommander.image_uris.normal = reader[3].ToString();
+                newCommander.isLegendary = true;
+                newCommander.color_identity_string = reader[4].ToString();
+            }
+
+            return newCommander;
+        }
         public Card getCardByName(string name)
         {
             string fetchCard = selectString;

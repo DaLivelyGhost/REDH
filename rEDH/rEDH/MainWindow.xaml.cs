@@ -43,12 +43,11 @@ namespace rEDH
         //-------Button Events--------------------------------------------
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
-            controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
+            Task<Card[]> deckTask = controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
                                     (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
+            Card[] deckList = deckTask.Result;
 
-            //Task<Card> taskCard = controller.demoCard();
-            //Card newCard = await taskCard;
-            //demoPopulate(newCard);
+            populateCardImages(deckList);
         }
         async void updateDatabaseButtonClick(object sender, RoutedEventArgs e)
         {
@@ -69,7 +68,17 @@ namespace rEDH
 
         //    imageTestBlue.Source = bit;
         //}
+        public void populateCardImages(Card[] cards)
+        {
+            for(int i = 0; i < cards.Length; i++)
+            {
+                if (cards[i] != null)
+                {
+                    cardArray[i].Source = new BitmapImage(new Uri(cards[i].image_uris.normal));
+                }
 
+            }
+        }
         private void initializeCardImages()
         {
             cardArray = new Image[100];
@@ -79,7 +88,9 @@ namespace rEDH
             for(int i = 0; i < 100; i++)
             {
                 cardArray[i] = new Image();
-                cardArray[i].Width = 672;
+                //cardArray[i].Width = 672;
+
+                cardArray[i].Stretch = Stretch.UniformToFill;
 
                 cardArray[i].Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "Assets\\null_image.jpg"));
 

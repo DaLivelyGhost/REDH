@@ -12,17 +12,29 @@ namespace rEDH
     [Serializable]
     public class DeckList
     {
-        public List<Card> Cards { get; set; }
+        private Card[] Cards;
 
-
-        public void addCard(Card toAdd)
+        public DeckList() 
         {
-            if(Cards == null)
-            {
-                Cards = new List<Card>();
-            }
-
-            Cards.Add(toAdd);
+            Cards = new Card[100];
+        
         }
+        public Card[] getDeck()
+        {
+            return Cards;
+        }
+        public void setCommander(Card commander)
+        {
+            Cards[0] = commander;
+        }
+        //public void addCard(Card toAdd)
+        //{
+        //    if(Cards == null)
+        //    {
+        //        Cards = new List<Card>();
+        //    }
+
+        //    Cards.Add(toAdd);
+        //}
     }
 }

@@ -25,6 +25,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Media.Protection.PlayReady;
+using Windows.Devices.SmartCards;
 
 
 // To learn more about WinUI, the WinUI project structure,
@@ -42,7 +43,7 @@ namespace rEDH
         private DeckList deckList;
         private ApiWrangler apiWrangler;
         private DatabaseWrangler databaseWrangler;
-
+        private DeckBuilder deckBuilder;
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -62,15 +63,17 @@ namespace rEDH
             this.apiWrangler = new ApiWrangler();
             this.databaseWrangler = new DatabaseWrangler();
             this.deckList = new DeckList();
+            this.deckBuilder = new DeckBuilder();
 
             m_window = new MainWindow(apiWrangler, this);
             m_window.Activate();
             
         }
 
-        public async void generateDeck(bool white, bool blue, bool black, bool red, bool green)
+        public async Task<Card[]> generateDeck(bool white, bool blue, bool black, bool red, bool green)
         {
-
+            Card[] deckList = deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green);
+            return deckList;
         }
         public async void updateDatabase()
         {

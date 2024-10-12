@@ -82,13 +82,13 @@
 
 
 
-        
-        
-        
-        
-        
+
+
+
+
+        <ScrollView Grid.Column="1">
         <Grid x:ConnectionId='3' x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"
-              MinWidth="1000" MinHeight="1000" Grid.Column="1">
+              MinWidth="1000" MinHeight="1000">
                 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
@@ -98,32 +98,32 @@
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
-                <RowDefinition Height="1*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
+                <RowDefinition Height=".5*"/>
             </Grid.RowDefinitions>
             
             <Border Background="White" Grid.RowSpan="20" Grid.ColumnSpan="5"/>
 
         </Grid>
-        
+        </ScrollView>
 
     </Grid>
 
