@@ -27,14 +27,17 @@ namespace rEDH
         {
             Cards[0] = commander;
         }
-        //public void addCard(Card toAdd)
-        //{
-        //    if(Cards == null)
-        //    {
-        //        Cards = new List<Card>();
-        //    }
-
-        //    Cards.Add(toAdd);
-        //}
+        public void setCMC(int index, float cmc)
+        {
+            Cards[index].cmc = cmc;
+        }
+        public void setType(int index, string type)
+        {
+            Cards[index].type_line = type;
+        }
+        public void setColorIdentity(int index, string[] identity)
+        {
+            Cards[index].color_identity = identity;
+        }
     }
 }
