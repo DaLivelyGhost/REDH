@@ -223,8 +223,9 @@ namespace rEDH
         }
         public Card queryCommander(string colorSearchToken)
         {
-            string commandString = selectString + cardtypeStrings[2] + " WHERE isLegendary = 1 AND "
-                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
+
+                string commandString = selectString + cardtypeStrings[2] + " WHERE isLegendary = 1 AND "
+                                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
 
             command = new SqliteCommand(commandString, connection);
             SqliteDataReader reader = command.ExecuteReader();
@@ -238,10 +239,40 @@ namespace rEDH
                 newCommander.mana_cost = reader[2].ToString();
                 newCommander.image_uris.normal = reader[3].ToString();
                 newCommander.isLegendary = true;
-                newCommander.color_identity_string = reader[4].ToString();
+                newCommander.color_identity_string = reader[5].ToString();
             }
 
             return newCommander;
+        }
+        public Card queryCard(string colorSearchToken, Card blueprint)
+        {
+            string cmcString = "cmc == ";
+            cmcString += blueprint.cmc.ToString();
+            
+
+            string commandString = selectString + blueprint.card_type.ElementAt(0) + " WHERE " + cmcString + " AND " 
+                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
+
+            command = new SqliteCommand(commandString, connection);
+            SqliteDataReader reader = command.ExecuteReader();
+
+            while(reader.Read())
+            {
+                blueprint.name = reader[0].ToString();
+                blueprint.mana_cost = reader[2].ToString();
+                blueprint.image_uris.normal = reader[3].ToString();
+                if (int.Parse(reader[4].ToString()) == 1)
+                {
+                    blueprint.isLegendary= true;
+                }
+                else
+                {
+                    blueprint.isLegendary = false;
+                }
+                blueprint.color_identity_string = reader[4].ToString();
+            }
+
+            return blueprint;
         }
         public Card getCardByName(string name)
         {

@@ -74,7 +74,14 @@ namespace rEDH
             {
                 if (cards[i] != null)
                 {
-                    cardArray[i].Source = new BitmapImage(new Uri(cards[i].image_uris.normal));
+                    try
+                    {
+                        cardArray[i].Source = new BitmapImage(new Uri(cards[i].image_uris.normal));
+                    }
+                    catch (Exception ex)
+                    {
+                        //do nothing
+                    }
                 }
 
             }

@@ -18,6 +18,11 @@ namespace rEDH
     {
         public Card()
         {
+            name = "";
+            mana_cost = "";
+            color_identity = [""];
+            type_line = "";
+
             image_uris = new cardImages();
         }
 

@@ -62,7 +62,6 @@ namespace rEDH
         {
             this.apiWrangler = new ApiWrangler();
             this.databaseWrangler = new DatabaseWrangler();
-            this.deckList = new DeckList();
             this.deckBuilder = new DeckBuilder();
 
             m_window = new MainWindow(apiWrangler, this);
@@ -72,8 +71,7 @@ namespace rEDH
 
         public async Task<Card[]> generateDeck(bool white, bool blue, bool black, bool red, bool green)
         {
-            Card[] deckList = deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green);
-            return deckList;
+            return deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green);       
         }
         public async void updateDatabase()
         {

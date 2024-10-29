@@ -7,6 +7,18 @@
       "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\deckbuilder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\card.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -17,18 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\databasewrangler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\databasewrangler.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\mainwindow.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|solutionrelative:redh\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{59BED078-EC69-4E63-AAC3-85085D3FFDE4}|rEDH\\rEDH.csproj|c:\\programming_practice\\randomedhdeck\\randomedhdeck\\redh\\redh\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -58,7 +58,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\MainWindow.xaml",
               "RelativeDocumentMoniker": "rEDH\\MainWindow.xaml",
@@ -66,43 +66,44 @@
               "RelativeToolTip": "rEDH\\MainWindow.xaml",
               "ViewState": "AQIAAEoAAAAAAAAAAAAAAFoAAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-07-18T21:02:51.711Z"
+              "WhenOpened": "2024-07-18T21:02:51.711Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "DatabaseWrangler.cs",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\DatabaseWrangler.cs",
               "RelativeDocumentMoniker": "rEDH\\DatabaseWrangler.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\DatabaseWrangler.cs",
               "RelativeToolTip": "rEDH\\DatabaseWrangler.cs",
-              "ViewState": "AQIAAA8AAAAAAAAAAAAAAOYAAAAAAAAA",
+              "ViewState": "AQIAAPYAAAAAAAAAAAAgwBIBAAAcAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-06T06:00:12.8Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "Card.cs",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\Card.cs",
               "RelativeDocumentMoniker": "rEDH\\Card.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\Card.cs",
               "RelativeToolTip": "rEDH\\Card.cs",
-              "ViewState": "AQIAACUAAAAAAAAAAAAnwFcAAAAZAAAA",
+              "ViewState": "AQIAAAwAAAAAAAAAAAAAABgAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-08-01T22:05:53.267Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 5,
               "Title": "DeckList.cs",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\DeckList.cs",
               "RelativeDocumentMoniker": "rEDH\\DeckList.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\DeckList.cs",
               "RelativeToolTip": "rEDH\\DeckList.cs",
-              "ViewState": "AQIAACAAAAAAAAAAAAAgwCcAAAAyAAAA",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAYwCQAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-11T18:02:06.574Z",
               "EditorCaption": ""
@@ -115,35 +116,36 @@
               "RelativeDocumentMoniker": "rEDH\\DeckBuilder.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\DeckBuilder.cs",
               "RelativeToolTip": "rEDH\\DeckBuilder.cs",
-              "ViewState": "AQIAACQAAAAAAAAAAAAUwAsBAAAAAAAA",
+              "ViewState": "AQIAAI4AAAAAAAAAAAAqwDEAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-10-04T20:40:37.657Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\App.xaml.cs",
               "RelativeDocumentMoniker": "rEDH\\App.xaml.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\App.xaml.cs",
               "RelativeToolTip": "rEDH\\App.xaml.cs",
-              "ViewState": "AQIAAEQAAAAAAAAAAAAIwEgAAAAhAAAA",
+              "ViewState": "AQIAAD4AAAAAAAAAAAAIwEkAAABbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-07-18T21:12:03.337Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 3,
               "Title": "MainWindow.xaml.cs",
               "DocumentMoniker": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\MainWindow.xaml.cs",
               "RelativeDocumentMoniker": "rEDH\\MainWindow.xaml.cs",
               "ToolTip": "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH\\MainWindow.xaml.cs",
               "RelativeToolTip": "rEDH\\MainWindow.xaml.cs",
-              "ViewState": "AQIAAAcAAAAAAAAAAAAMwDEAAAApAAAA",
+              "ViewState": "AQIAACgAAAAAAAAAAAAewDEAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-07-18T21:03:57.756Z"
+              "WhenOpened": "2024-07-18T21:03:57.756Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Security.Cryptography.Core;
 
 namespace rEDH
 {
@@ -38,13 +39,15 @@ namespace rEDH
             setColorIdentitySearchTerms(white, blue, black, red, green);
 
             //sets the first spot in the card array to the commander
+
             deckList.setCommander(dbWrangler.queryCommander(commanderColorIdentitySearch));
 
-            //Blueprint out the cards' cmc, card types, and colors
+            //Blueprint out the cards' cmc, card types, and colors. This gives us a general framework of what we want from the db
+            //when we query for random cards
             blueprintCards(white, blue, black, red, green);
 
-            //query the db for card name and effects and card arts based on the blueprint we've established.
-
+            //query the db for card name, effects and card arts based on the blueprint we've established.
+            queryCards(dbWrangler);
 
             //return to display.
             return deckList.getDeck();
@@ -65,7 +68,7 @@ namespace rEDH
             if (colorCount == 1)
             {
                 commanderColorIdentitySearch = "colorIdentity LIKE ";
-                colorIdentitySearch = "colorIdentity LIKE";
+                colorIdentitySearch = "colorIdentity LIKE ";
 
                 for (int i = 0; i < colors.Length; i++)
                 {
@@ -75,23 +78,23 @@ namespace rEDH
                         {
                             case 0:
                                 commanderColorIdentitySearch += "'W'";
-                                colorIdentitySearch = "'W'";
+                                colorIdentitySearch += "'W'";
                                 break;
                             case 1:
                                 commanderColorIdentitySearch += "'U'";
-                                colorIdentitySearch = "'U'";
+                                colorIdentitySearch += "'U'";
                                 break;
                             case 2:
                                 commanderColorIdentitySearch += "'B'";
-                                colorIdentitySearch = "'B'";
+                                colorIdentitySearch += "'B'";
                                 break;
                             case 3:
                                 commanderColorIdentitySearch += "'R'";
-                                colorIdentitySearch = "'R'";
+                                colorIdentitySearch += "'R'";
                                 break;
                             case 4:
                                 commanderColorIdentitySearch += "'G'";
-                                colorIdentitySearch = "'R'";
+                                colorIdentitySearch += "'R'";
                                 break;
                         }
 
@@ -113,13 +116,13 @@ namespace rEDH
 
                 for (int i = 0; i < colors.Length; i++)
                 {
-                    if (!first)
-                    {
-                        commanderColorIdentitySearch += " AND ";
-                        colorIdentitySearch += " AND ";
-                    }
                     if (!colors[i])
                     {
+                        if (!first)
+                        {
+                            commanderColorIdentitySearch += " AND ";
+                            colorIdentitySearch += " AND ";
+                        }
                         commanderColorIdentitySearch += "colorIdentity NOT LIKE ";
                         colorIdentitySearch += "colorIdentity NOT LIKE ";
 
@@ -149,7 +152,11 @@ namespace rEDH
                     }
                     else
                     {
-                        commanderColorIdentitySearch += "colorIdentity LIKE ";
+                        if (!first)
+                        {
+                            commanderColorIdentitySearch += " AND ";
+                        }
+                        commanderColorIdentitySearch += " colorIdentity LIKE ";
 
                         switch (i)
                         {
@@ -217,56 +224,75 @@ namespace rEDH
                             deckList.setType(i, "Instant");
                             break;
                     }
-                    int rndmPick;
-                    List<string> tempIdentity = new List<string>();
-
-                    //set color identity
-                    if(white)
-                    {
-                        rndmPick = rndm.Next(2); 
-                        if(rndmPick == 1)
-                        {
-                            tempIdentity.Add("W");
-                        }
-                    }
-                    if(blue)
-                    {
-                        rndmPick = rndm.Next(2);
-                        if (rndmPick == 1)
-                        {
-                            tempIdentity.Add("U");
-                        }
-                    }
-                    if(black)
-                    {
-                        rndmPick = rndm.Next(2);
-                        if (rndmPick == 1)
-                        {
-                            tempIdentity.Add("B");
-                        }
-                    }
-                    if(red)
-                    {
-                        rndmPick = rndm.Next(2);
-                        if (rndmPick == 1)
-                        {
-                            tempIdentity.Add("R");
-                        }
-                    }
-                    if(green)
-                    {
-                        rndmPick = rndm.Next(2);
-                        if (rndmPick == 1)
-                        {
-                            tempIdentity.Add("G");
-                        }
-                    }
-                    string[] identity = tempIdentity.ToArray();
-
-                    deckList.setColorIdentity(i, identity);
                 }
+                //Now time for lands
+                else
+                {
+                    deckList.setType(i, "Land");
+
+                }
+                int rndmPick;
+                List<string> tempIdentity = new List<string>();
+
+                //set color identity
+                if (white)
+                {
+                    rndmPick = rndm.Next(2);
+                    if (rndmPick == 1)
+                    {
+                        tempIdentity.Add("W");
+                    }
+                }
+                if (blue)
+                {
+                    rndmPick = rndm.Next(2);
+                    if (rndmPick == 1)
+                    {
+                        tempIdentity.Add("U");
+                    }
+                }
+                if (black)
+                {
+                    rndmPick = rndm.Next(2);
+                    if (rndmPick == 1)
+                    {
+                        tempIdentity.Add("B");
+                    }
+                }
+                if (red)
+                {
+                    rndmPick = rndm.Next(2);
+                    if (rndmPick == 1)
+                    {
+                        tempIdentity.Add("R");
+                    }
+                }
+                if (green)
+                {
+                    rndmPick = rndm.Next(2);
+                    if (rndmPick == 1)
+                    {
+                        tempIdentity.Add("G");
+                    }
+                }
+
+
+                string[] identity = tempIdentity.ToArray();
+
+                deckList.setColorIdentity(i, identity);
+
+
 
             }
         }
+        private void queryCards(DatabaseWrangler dbWrangler)
+        {
+
+            for (int i = 1; i < 100; i++)
+            {
+                deckList.setCard(i, dbWrangler.queryCard(colorIdentitySearch, deckList.getCard(i)));
+            }
+        }
     }
+         
 }
