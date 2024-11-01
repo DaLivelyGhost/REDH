@@ -49,6 +49,11 @@ namespace rEDH
             //query the db for card name, effects and card arts based on the blueprint we've established.
             queryCards(dbWrangler);
 
+            //check integrity of decklist, make sure it didn't try to generate any cards that don't exist
+            //or duplicates of cards that aren't basic lands.
+            validateCards(dbWrangler);
+            //ensureSingleton(dbWrangler);
+
             //return to display.
             return deckList.getDeck();
         }
@@ -110,19 +115,28 @@ namespace rEDH
             //multicolored
             else
             {
-                bool first = true;
                 commanderColorIdentitySearch = "";
                 colorIdentitySearch = "";
 
                 for (int i = 0; i < colors.Length; i++)
                 {
+                    //insert an AND inbetween each search token
+                    if (!commanderColorIdentitySearch.Equals(""))
+                    {
+                        commanderColorIdentitySearch += " AND ";
+                    }
+                    //---------------------------------------------
+
+                    //if the checkbox is unmarked
                     if (!colors[i])
                     {
-                        if (!first)
+                        //insert an AND inbetween each search token. The regular search token uses only negative logic like
+                        //so the colorIdentitySearch is isolated to unmarked checkboxes. ex: cis NOT LIKE %U% AND NOT LIKE %R%
+                        if (!colorIdentitySearch.Equals(""))
                         {
-                            commanderColorIdentitySearch += " AND ";
                             colorIdentitySearch += " AND ";
                         }
+
                         commanderColorIdentitySearch += "colorIdentity NOT LIKE ";
                         colorIdentitySearch += "colorIdentity NOT LIKE ";
 
@@ -150,12 +164,9 @@ namespace rEDH
                                 break;
                         }
                     }
+                    //if the checkbox is marked
                     else
                     {
-                        if (!first)
-                        {
-                            commanderColorIdentitySearch += " AND ";
-                        }
                         commanderColorIdentitySearch += " colorIdentity LIKE ";
 
                         switch (i)
@@ -177,8 +188,6 @@ namespace rEDH
                                 break;
                         }
                     }
-
-                    first = false;
                 }
             }
         }
@@ -206,29 +215,29 @@ namespace rEDH
                     switch (randomType)
                     {
                         case 0:
-                            deckList.setType(i, "Artifact");
+                            deckList.setTypeLine(i, "Artifact");
                             break;
                         case 1:
-                            deckList.setType(i, "Creature");
+                            deckList.setTypeLine(i, "Creature");
                             break;
                         case 2:
-                            deckList.setType(i, "Enchantment");
+                            deckList.setTypeLine(i, "Enchantment");
                             break;
                         case 3:
-                            deckList.setType(i, "Planeswalker");
+                            deckList.setTypeLine(i, "Planeswalker");
                             break;
                         case 4:
-                            deckList.setType(i, "Sorcery");
+                            deckList.setTypeLine(i, "Sorcery");
                             break;
                         case 5:
-                            deckList.setType(i, "Instant");
+                            deckList.setTypeLine(i, "Instant");
                             break;
                     }
                 }
                 //Now time for lands
                 else
                 {
-                    deckList.setType(i, "Land");
+                    deckList.setTypeLine(i, "Land");
 
                 }
                 int rndmPick;
@@ -291,6 +300,70 @@ namespace rEDH
             for (int i = 1; i < 100; i++)
             {
                 deckList.setCard(i, dbWrangler.queryCard(colorIdentitySearch, deckList.getCard(i)));
+            }
+        }
+        private void validateCards(DatabaseWrangler dbWrangler)
+        {
+            //iterate through each card in the deck
+            for(int i = 0; i < 100; i++)
+            {
+
+                //if the name is "", that means that it's not a valid card and needs to be replaced
+                if(deckList.getCard(i).name == "")
+                {
+                    //Possible card types that the card can be. We'll be removing them one by one until a card works.
+                    string[] types = {"Artifact","Creature", "Enchantment", "Instant", "Planeswalker", "Sorcery"};
+                    List<string> cardTypes = new List<string>(types);
+
+                    while (deckList.getCard(i).name == "")
+                    {
+
+                        //since the card doesn't exist, we know it's a blueprinted card and only has 1 card type at the moment.
+                        //We'll now remove it from the possible card types it can be and try again.
+                        switch (deckList.getCard(i).card_type[0])
+                        {
+                            case "Artifact":
+                                cardTypes.Remove("Artifact");
+                                break;
+                            case "Creature":
+                                cardTypes.Remove("Creature");
+                                break;
+                            case "Enchantment":
+                                cardTypes.Remove("Enchantment");
+                                break;
+                            case "Instant":
+                                cardTypes.Remove("Instant");
+                                break;
+                            case "Planeswalker":
+                                cardTypes.Remove("Planeswalker");
+                                break;
+                            case "Sorcery":
+                                cardTypes.Remove("Sorcery");
+                                break;
+                        }
+
+                        Random rndm = new Random();
+                        int randomType;
+
+                        randomType = rndm.Next(cardTypes.Count());
+                        deckList.setTypeLine(i, cardTypes.ElementAt(randomType));
+                        deckList.setCard(i, dbWrangler.queryCard(colorIdentitySearch, deckList.getCard(i)));
+                    }
+                }
+            }
+        }
+        private void ensureSingleton(DatabaseWrangler dbWrangler)
+        {
+            //starting at 1 to ignore the commander.
+            for(int i = 1; i < 100; i++)
+            {
+                for(int j = i + 1; j < 100; j++)
+                {
+                    while(deckList.getCard(j).name == deckList.getCard(i).name)
+                    {
+                        deckList.setCard(j, dbWrangler.queryCard(colorIdentitySearch, deckList.getCard(j)));
+                    }
+                }
             }
         }
     }

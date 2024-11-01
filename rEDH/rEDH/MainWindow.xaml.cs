@@ -60,15 +60,7 @@ namespace rEDH
 
         }
 
-        //public void demoPopulate(Card card)
-        //{
-        //    BitmapImage bit = new BitmapImage();
-
-        //    bit.UriSource = new Uri(card.image_uris.normal);
-
-        //    imageTestBlue.Source = bit;
-        //}
-        public void populateCardImages(Card[] cards)
+        public async void populateCardImages(Card[] cards)
         {
             for(int i = 0; i < cards.Length; i++)
             {
@@ -83,7 +75,7 @@ namespace rEDH
                         //do nothing
                     }
                 }
-
+                await Task.Delay(100);
             }
         }
         private void initializeCardImages()

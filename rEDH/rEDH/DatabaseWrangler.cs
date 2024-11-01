@@ -248,10 +248,16 @@ namespace rEDH
         {
             string cmcString = "cmc == ";
             cmcString += blueprint.cmc.ToString();
-            
 
-            string commandString = selectString + blueprint.card_type.ElementAt(0) + " WHERE " + cmcString + " AND " 
-                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
+            //Append an AND to the end of the color search token. 
+            //Not necessary if the user checks all 5 boxes, which results in the search string to be ""
+            if (!colorSearchToken.Equals(""))
+            {
+                colorSearchToken += " AND ";   
+            }
+
+            string commandString = selectString + blueprint.card_type.ElementAt(0) + " WHERE " + colorSearchToken
+                    + cmcString + " ORDER BY RANDOM() LIMIT 1;";
 
             command = new SqliteCommand(commandString, connection);
             SqliteDataReader reader = command.ExecuteReader();
