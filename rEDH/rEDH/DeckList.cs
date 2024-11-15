@@ -58,5 +58,62 @@ namespace rEDH
         {
             return Cards[index].type_line;
         }
+        //Sorting algorithms------------------------------------------
+        public void nameSort()
+        {
+            //starting at 1 to ignore the commander. Keeping that at position 0 always.
+            for(int i = 1; i < Cards.Length - 1; i++)
+            {
+                for(int j = i + 1; j < Cards.Length; j++)
+                {
+                    if (String.Compare(Cards[i].name, Cards[j].name) == 1)
+                    {
+                        Card temp = Cards[i];
+                        Cards[i] = Cards[j];
+                        Cards[j] = temp;    
+                    }
+                }
+            }
+        }
+        public void cmcSort()
+        {
+            //starting at 1 to ignore the commander. Keeping that at position 0 always.
+            for (int i = 1; i < Cards.Length - 1; i++)
+            {
+                for(int j = i + 1; j < Cards.Length; j++)
+                {
+                    if (Cards[i].cmc > Cards[j].cmc)
+                    {
+                        Card temp = Cards[i];
+                        Cards[i] = Cards[j];
+                        Cards[j] = temp;
+
+                    }
+                    else if(String.Compare(Cards[i].name, Cards[j].name) == 1 && Cards[i].cmc == Cards[j].cmc)
+                    {
+                        Card temp = Cards[i];
+                        Cards[i] = Cards[j];
+                        Cards[j] = temp;
+                    }
+                }
+
+            }
+        }
+        public void typeSort()
+        {
+            //starting at 1 to ignore the commander. Keeping that at position 0 always.
+            for (int i = 1; i < Cards.Length - 1; i++)
+            {
+                for (int j = i + 1; j < Cards.Length; j++)
+                {
+                    if (String.Compare(Cards[i].card_type[0], Cards[j].card_type[0]) == 1)
+                    {
+                        Card temp = Cards[i];
+                        Cards[i] = Cards[j];
+                        Cards[j] = temp;
+                    }
+                }
+            }
+        }
     }
 }

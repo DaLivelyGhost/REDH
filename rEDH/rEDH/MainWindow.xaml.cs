@@ -53,6 +53,18 @@ namespace rEDH
         {
            controller.updateDatabase();
         }
+        async void nameSortButtonClick(object sender, RoutedEventArgs e)
+        {
+            populateCardImages(controller.sortByName());
+        }
+        async void cmcSortButtonClick(object sender, RoutedEventArgs e)
+        {
+            populateCardImages(controller.sortByCmc());
+        }
+        async void typeSortButtonClick(object sender, RoutedEventArgs e)
+        {
+            populateCardImages(controller.sortByType()); 
+        }
         //-------End Button Events--------------------------------------
 
         public void setUpdateTime()
@@ -62,6 +74,11 @@ namespace rEDH
 
         public async void populateCardImages(Card[] cards)
         {
+            if(cards == null)
+            {
+                return;
+            }
+
             for(int i = 0; i < cards.Length; i++)
             {
                 if (cards[i] != null)

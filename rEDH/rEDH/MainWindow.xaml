@@ -22,7 +22,12 @@
         <TextBlock Foreground="Black" FontSize="25" Text="rEDH" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
         
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="2">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="10">
+
+            <!--<DropDownButton HorizontalAlignment="Center" VerticalAlignment="Center" Content="Mana Range">
+                <Button Content="Low Range"></Button>
+            </DropDownButton>-->
+            
             <TextBlock Foreground="Black" FontSize="18" Text="Color Identity" HorizontalAlignment="Center"/>
 
             <Grid x:Name="checkBoxGrid" HorizontalAlignment="Center">
@@ -85,8 +90,33 @@
 
 
 
+        <Grid Grid.Column="1">
 
-        <ScrollView Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="9*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Padding="15">
+
+                <TextBlock Foreground="Black" FontSize="20*" Text="Sort:" VerticalAlignment="Center"
+                           Grid.Column="0" Grid.Row="0"/>
+                
+                <Button x:Name="namesortButton" HorizontalAlignment="Center" 
+                    Content="aBC" Foreground="Black" Background="#D3D3D3"
+                    Click="nameSortButtonClick"/>
+                
+                <Button x:Name="cmcsortButton" HorizontalAlignment="Center" 
+                    Content="012" Foreground="Black" Background="#D3D3D3"
+                    Click="cmcSortButtonClick"/>
+                
+                <Button x:Name="typesortButton" HorizontalAlignment="Center" 
+                    Content="type" Foreground="Black" Background="#D3D3D3"
+                    Click="typeSortButtonClick"/>
+                
+            </StackPanel>    
+            
+        <ScrollView Grid.Row="1">
         <Grid x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"
               MinWidth="1000" MinHeight="1000">
                 
@@ -124,7 +154,7 @@
 
         </Grid>
         </ScrollView>
-
+        </Grid>
     </Grid>
 
 </Window>

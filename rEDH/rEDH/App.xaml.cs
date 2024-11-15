@@ -40,7 +40,6 @@ namespace rEDH
     {
 
         private Window m_window;
-        private DeckList deckList;
         private ApiWrangler apiWrangler;
         private DatabaseWrangler databaseWrangler;
         private DeckBuilder deckBuilder;
@@ -108,22 +107,54 @@ namespace rEDH
 
             databaseWrangler.setTimeUpdated(updateTime);
         }
+        public Card[] sortByName()
+        {
+            try
+            {
+                DeckList deckList = deckBuilder.getDeckList();
+                deckList.nameSort();
+                return (deckList.getDeck());
+            }
+            catch(Exception e)
+            {
+
+                return null; 
+            }
+
+        }
+        public Card[] sortByCmc()
+        {
+            try
+            {
+                DeckList deckList = deckBuilder.getDeckList();
+                deckList.cmcSort();
+                return (deckList.getDeck());
+            }
+            catch (Exception e)
+            {
+
+                return null;
+            }
+        }
+        //TODO come back and finish this after we fix the data atrophe happening from the database.
+        public Card[] sortByType()
+        {
+            try
+            {
+                DeckList deckList = deckBuilder.getDeckList();
+                deckList.typeSort();
+                return (deckList.getDeck());
+            }
+            catch (Exception e)
+            {
+
+                return null; 
+            }
+        }
         public string getUpdateTime()
         {
             return null;
         }
-        //public async Task<Card> demoCard()
-        //{
-        //    //query scryfall and deserialize json into card
-        //    Task<Card> cardTask = apiWrangler.testQuery();
-        //    Card newCard = await cardTask;
-
-        //    //add card object to database and query card back for demo purposes
-        //    databaseWrangler.addCard(newCard);
-        //    Card databaseCard = databaseWrangler.getCardByName(newCard.name);
-            
-        //    return databaseCard;
-        //}
 
 
     }

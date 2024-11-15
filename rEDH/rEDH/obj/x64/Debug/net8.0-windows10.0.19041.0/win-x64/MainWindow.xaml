@@ -22,10 +22,15 @@
         <TextBlock Foreground="Black" FontSize="25" Text="rEDH" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
         
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="2">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="10">
+
+            <!--<DropDownButton HorizontalAlignment="Center" VerticalAlignment="Center" Content="Mana Range">
+                <Button Content="Low Range"></Button>
+            </DropDownButton>-->
+            
             <TextBlock Foreground="Black" FontSize="18" Text="Color Identity" HorizontalAlignment="Center"/>
 
-            <Grid x:ConnectionId='6' x:Name="checkBoxGrid" HorizontalAlignment="Center">
+            <Grid x:ConnectionId='9' x:Name="checkBoxGrid" HorizontalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
@@ -49,20 +54,20 @@
                 <TextBlock Foreground="Black" FontSize="10*" Text="Green" VerticalAlignment="Center"
                            Grid.Column="4" Grid.Row="0"/>
                 
-                <CheckBox x:ConnectionId='8' x:Name="whiteCheckBox"
+                <CheckBox x:ConnectionId='11' x:Name="whiteCheckBox"
                           Grid.Column="0" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='9' x:Name="blueCheckBox"
+                <CheckBox x:ConnectionId='12' x:Name="blueCheckBox"
                           Grid.Column="1" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='10' x:Name="blackCheckBox"
+                <CheckBox x:ConnectionId='13' x:Name="blackCheckBox"
                           Grid.Column="2" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='11' x:Name="redCheckBox"
+                <CheckBox x:ConnectionId='14' x:Name="redCheckBox"
                           Grid.Column="3" Grid.Row="1"/>
-                <CheckBox x:ConnectionId='12' x:Name="greenCheckBox"
+                <CheckBox x:ConnectionId='15' x:Name="greenCheckBox"
                           Grid.Column="4" Grid.Row="1"/>
 
             </Grid>
 
-            <Button x:ConnectionId='7' x:Name="generateButton" HorizontalAlignment="Center" 
+            <Button x:ConnectionId='10' x:Name="generateButton" HorizontalAlignment="Center" 
                     Content="Generate Deck" Foreground="Black" Background="#D3D3D3"
                                                >
 
@@ -73,11 +78,11 @@
 
         
         <StackPanel VerticalAlignment="Bottom">
-            <Button x:ConnectionId='4' x:Name="databaseButton" HorizontalAlignment="Center"
+            <Button x:ConnectionId='7' x:Name="databaseButton" HorizontalAlignment="Center"
                         Content="Update Database" Foreground="Black" Background="White"
                                                          >
             </Button>
-            <TextBlock x:ConnectionId='5' x:Name="lastUpdatedText" Foreground="Black" Text="Last Updated: " FontSize="10*" HorizontalAlignment="Center"/>
+            <TextBlock x:ConnectionId='8' x:Name="lastUpdatedText" Foreground="Black" Text="Last Updated: " FontSize="10*" HorizontalAlignment="Center"/>
         </StackPanel>
 
 
@@ -85,8 +90,33 @@
 
 
 
+        <Grid Grid.Column="1">
 
-        <ScrollView Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="9*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Padding="15">
+
+                <TextBlock Foreground="Black" FontSize="20*" Text="Sort:" VerticalAlignment="Center"
+                           Grid.Column="0" Grid.Row="0"/>
+                
+                <Button x:ConnectionId='4' x:Name="namesortButton" HorizontalAlignment="Center" 
+                    Content="aBC" Foreground="Black" Background="#D3D3D3"
+                                               />
+                
+                <Button x:ConnectionId='5' x:Name="cmcsortButton" HorizontalAlignment="Center" 
+                    Content="012" Foreground="Black" Background="#D3D3D3"
+                                              />
+                
+                <Button x:ConnectionId='6' x:Name="typesortButton" HorizontalAlignment="Center" 
+                    Content="type" Foreground="Black" Background="#D3D3D3"
+                                               />
+                
+            </StackPanel>    
+            
+        <ScrollView Grid.Row="1">
         <Grid x:ConnectionId='3' x:Name="deckView" VerticalAlignment="Top" HorizontalAlignment="Center"
               MinWidth="1000" MinHeight="1000">
                 
@@ -124,7 +154,7 @@
 
         </Grid>
         </ScrollView>
-
+        </Grid>
     </Grid>
 
 </Window>
