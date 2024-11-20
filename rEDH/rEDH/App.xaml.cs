@@ -153,7 +153,17 @@ namespace rEDH
         }
         public string getUpdateTime()
         {
-            return null;
+            string updateTime = databaseWrangler.getTimeUpdated();
+            return updateTime;
+            try
+            {
+
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
 

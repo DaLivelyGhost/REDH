@@ -3,9 +3,11 @@ using Microsoft.UI;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data;
 using System.Data.Common;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Transactions;
@@ -25,9 +27,10 @@ namespace rEDH
         private SqliteTransaction transaction;
 
         //Columns. If add/remove columns do it here.
-        private static string tableDefinitionStrings = "name TEXT, cmc INT, manaCost TEXT, imageURI TEXT, isLegendary BOOLEAN, colorIdentity TEXT, cardType TEXT";
-        private static string tableColumns = "name, cmc, manaCost, imageURI, isLegendary, colorIdentity, cardType";
-        private static string valuesString = "values ($name, $cmc, $manaCost, $imageURI, $isLegendary, $colorIdentity, $cardType)";
+        private static string tableDefinitionStrings = "name TEXT, cmc INT, manaCost TEXT, imageURI TEXT, isLegendary BOOLEAN, " +
+            "colorIdentity TEXT, cardType TEXT, edhLegal BOOLEAN, pauperLegal BOOLEAN ,predhLegal BOOLEAN";
+        private static string tableColumns = "name, cmc, manaCost, imageURI, isLegendary, colorIdentity, cardType, edhLegal, pauperLegal, predhLegal";
+        private static string valuesString = "values ($name, $cmc, $manaCost, $imageURI, $isLegendary, $colorIdentity, $cardType, $edhLegal, $pauperLegal, $predhLegal)";
         private static string foreignKeyString = "FOREIGN KEY (name) REFERENCES Master(name)";
         private void addParameters(Card c)
         {
@@ -38,6 +41,9 @@ namespace rEDH
             command.Parameters.AddWithValue("$isLegendary", c.isLegendary);
             command.Parameters.AddWithValue("$colorIdentity", c.color_identity_string);
             command.Parameters.AddWithValue("$cardType", concatonateString(c.card_type.ToArray()));
+            command.Parameters.AddWithValue("$edhLegal", c.legalities.commander);
+            command.Parameters.AddWithValue("$pauperLegal", c.legalities.paupercommander);
+            command.Parameters.AddWithValue("$predhLegal", c.legalities.predh);
         }
 
         //Command strings. 
@@ -78,13 +84,6 @@ namespace rEDH
             command = new SqliteCommand(commandString, connection);
             command.ExecuteNonQuery();
 
-            //CREATE TABLE IF NOT EXISTS [tablename] ([columns] FOREIGN KEY(name) REFERENCES all(name));
-            //for (int i = 0; i < colorStrings.Length; i++)
-            //{               
-            //    commandString = createString + colorStrings[i] + " (" + tableDefinitionStrings + ", " + foreignKeyString + ");";
-            //    command = new SqliteCommand(commandString, connection);
-            //    command.ExecuteNonQuery();
-            //}
             for (int i = 0; i < cardtypeStrings.Length; i++)
             {
                 commandString = createString + cardtypeStrings[i] + " (" +  tableDefinitionStrings + ", " + foreignKeyString + ");";
@@ -134,6 +133,19 @@ namespace rEDH
             command.Parameters.AddWithValue("$lastUpdated", time);
             command.ExecuteNonQuery();
 
+        }
+        public string getTimeUpdated()
+        {
+            command = new SqliteCommand("SELECT lastUpdated FROM AppInfo",connection);
+
+            SqliteDataReader reader = command.ExecuteReader();
+            string lastUpdated = "";
+            
+            while(reader.Read())
+            {
+                lastUpdated = reader[0].ToString();
+            }
+            return lastUpdated;
         }
         public async void refreshTables()
         {

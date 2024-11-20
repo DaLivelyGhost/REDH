@@ -38,6 +38,7 @@ namespace rEDH
             this.controller = controller;
 
             initializeCardImages();
+            setUpdateTime();
         }
 
         //-------Button Events--------------------------------------------
@@ -69,7 +70,8 @@ namespace rEDH
 
         public void setUpdateTime()
         {
-
+            string timeUpdated = controller.getUpdateTime();
+            lastUpdatedText.Text = "Last Updated: " + timeUpdated;
         }
 
         public async void populateCardImages(Card[] cards)
