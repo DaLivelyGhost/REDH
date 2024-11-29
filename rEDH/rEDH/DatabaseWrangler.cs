@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -28,7 +29,7 @@ namespace rEDH
 
         //Columns. If add/remove columns do it here.
         private static string tableDefinitionStrings = "name TEXT, cmc INT, manaCost TEXT, imageURI TEXT, isLegendary BOOLEAN, " +
-            "colorIdentity TEXT, cardType TEXT, edhLegal BOOLEAN, pauperLegal BOOLEAN ,predhLegal BOOLEAN";
+            "colorIdentity TEXT, cardType TEXT, edhLegal TEXT, pauperLegal TEXT ,predhLegal TEXT";
         private static string tableColumns = "name, cmc, manaCost, imageURI, isLegendary, colorIdentity, cardType, edhLegal, pauperLegal, predhLegal";
         private static string valuesString = "values ($name, $cmc, $manaCost, $imageURI, $isLegendary, $colorIdentity, $cardType, $edhLegal, $pauperLegal, $predhLegal)";
         private static string foreignKeyString = "FOREIGN KEY (name) REFERENCES Master(name)";
@@ -51,6 +52,8 @@ namespace rEDH
         private static string dropString = "DROP TABLE IF EXISTS ";
         private static string selectString = "SELECT " + tableColumns + " FROM ";
         private static string insertString = "INSERT INTO ";
+
+        private string formatTokenString = "";
         
         //command strings & variables for enforcing singleton.
         private string cardExclusionsString = "";
@@ -136,16 +139,24 @@ namespace rEDH
         }
         public string getTimeUpdated()
         {
-            command = new SqliteCommand("SELECT lastUpdated FROM AppInfo",connection);
-
-            SqliteDataReader reader = command.ExecuteReader();
-            string lastUpdated = "";
-            
-            while(reader.Read())
+            try
             {
-                lastUpdated = reader[0].ToString();
+                command = new SqliteCommand("SELECT lastUpdated FROM AppInfo", connection);
+
+                SqliteDataReader reader = command.ExecuteReader();
+                string lastUpdated = "";
+
+                while (reader.Read())
+                {
+                    lastUpdated = reader[0].ToString();
+                }
+                return lastUpdated;
             }
-            return lastUpdated;
+            catch(Exception e)
+            {
+                return null;
+            }
+
         }
         public async void refreshTables()
         {
@@ -202,8 +213,10 @@ namespace rEDH
             }
         }
         
-        public Card queryCard(string[] colorIdentity, string cardType, float cmc, bool isCommander)
+        public Card queryCard(string[] colorIdentity, string cardType, float cmc, bool isCommander, string format)
         {
+
+            
             //create a search token based off the colors that are in the card's color identity.
             //ex. WHERE colorIdentity LIKE 'G' and colorIdentity LIKE 'B'
             string colorSearchToken = setColorSearchTerms(colorIdentity);
@@ -216,19 +229,29 @@ namespace rEDH
             if (isCommander)
             {
                 commandString = selectString + "Creature" + " WHERE isLegendary = 1 AND "
-                + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
+                + colorSearchToken + " AND " + formatTokenString + " ORDER BY RANDOM() LIMIT 1;";
             }
-            else
+            //The 99
+            else if(cardType != null)
             {
                 commandString = selectString + cardType + " WHERE "
-                + colorSearchToken + " AND " + cardExclusionsString + " ORDER BY RANDOM() LIMIT 1;";
+                + colorSearchToken + " AND " + "cmc = " + cmc.ToString() + " AND " + cardExclusionsString + " AND " + formatTokenString 
+                + " ORDER BY RANDOM() LIMIT 1;";
 
                 addExcludedCardParameters();
             }
+            //edge case for when validateCard has hit a wall. Generates a card in the format and color identity.
+            //Shows no care for type or cmc.
+            else
+            {
+                commandString = selectString + masterString + " WHERE " + colorSearchToken
+                    + " AND " + cardExclusionsString + " AND " + formatTokenString + " ORDER BY RANDOM() LIMIT 1;";
+                addExcludedCardParameters();
+            }
+
+            addFormatParameters();
 
             command.CommandText = commandString;
-
-
 
             command.Prepare();
             SqliteDataReader reader = command.ExecuteReader();
@@ -237,12 +260,34 @@ namespace rEDH
 
             while (reader.Read())
             {
+                //name
                 newCard.name = reader[0].ToString();
-                newCard.cmc = float.Parse(reader[1].ToString());
+                //cmc
+                string cmcString = reader[1].ToString();
+                newCard.cmc = float.Parse(cmcString);
+                //manacost                
                 newCard.mana_cost = reader[2].ToString();
+                //image URIs
                 newCard.image_uris.normal = reader[3].ToString();
-                newCard.isLegendary = true;
+                //isLegendary
+                if (int.Parse(reader[4].ToString()) == 1)
+                {
+                    newCard.isLegendary = true;
+                }
+                else
+                {
+                    newCard.isLegendary = false;
+                }
+                //color identity
                 newCard.color_identity_string = reader[5].ToString();
+                newCard.color_identity = deconcatonateChars(reader[5].ToString());
+                //type
+                string type = reader[6].ToString();
+                newCard.card_type = deconcatonateString(type);
+                //legalities
+                newCard.legalities.commander = reader[7].ToString();
+                newCard.legalities.paupercommander = reader[8].ToString();
+                newCard.legalities.predh = reader[9].ToString();
             }
 
             return newCard;
@@ -336,7 +381,35 @@ namespace rEDH
 
             return multiColored;
         }
-        
+        public void setFormatSearchTerms(string format)
+        {
+            if(format == null)
+            {
+                formatTokenString = "edhLegal LIKE $legal";
+            }
+            switch(format)
+            {
+                case ("EDH"):
+
+                    formatTokenString = "edhLegal LIKE $legal";
+                    break;
+                case ("PreDH"):
+
+                    formatTokenString = "predhLegal LIKE $legal";
+                    break;
+                case ("Pauper Commander"):
+
+                    formatTokenString =  "pauperLegal LIKE $legal";
+                    break;
+
+            }
+        }
+        private void addFormatParameters()
+        {
+            SqliteParameter formatParam = new SqliteParameter("$legal", SqliteType.Text);
+            formatParam.Value = "legal";
+            command.Parameters.Add(formatParam);
+        }
         public void excludeCardNames(string toExclude)
         {
             
@@ -377,21 +450,55 @@ namespace rEDH
             }
             return toReturn;
         }
-        private string[] deconcatonateString(string toDeconcatonate)
+        private List<string> deconcatonateString(string toDeconcatonate)
         {
+            char[] charArray = toDeconcatonate.ToCharArray();
+            List<char> charList = new List<char>();
             List<string> toReturn = new List<string>();
-            int stringStart = 0;
-            
-            for(int i = 0; i < toDeconcatonate.Length; i++)
+
+            //step through the string as a list of chars and break whenever we hit a comma
+            for(int i = 0; i < charArray.Length; i++)
             {
-                if (toDeconcatonate.ElementAt(i).Equals(","))
+                if (charArray[i].Equals(','))
                 {
-                    toReturn.Add(toDeconcatonate.Substring(stringStart, i));
-                    stringStart = i + 1;
+                    string type = "";
+                    foreach(char c in charList)
+                    {
+                        type += c;
+                    }
+                    toReturn.Add(type);
+                    charList.Clear();
+                }
+                else
+                {
+                    charList.Add(charArray[i]);
                 }
             }
+            //if toReturn is empty, then it means we did not hit a comma. (singular type)
+            if(toReturn.Count() == 0)
+            {
+                string type = "";
+                foreach(char c in charList)
+                {
+                    type += c;
+                }
 
-            return toReturn.ToArray();
+                toReturn.Add(type);
+            }
+
+            return toReturn;
+        }
+        private string[] deconcatonateChars(string toDeconcatonate)
+        {
+            char[] charArray = toDeconcatonate.ToCharArray();
+            string[] toReturn = new string[charArray.Length];
+
+            for (int i = 0; i < charArray.Length; i++)
+            {
+                toReturn[i] = charArray[i].ToString();
+            }
+
+            return toReturn;
         }
         public void closeDatabase()
         {

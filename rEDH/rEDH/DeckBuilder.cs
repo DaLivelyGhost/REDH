@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
@@ -14,7 +15,7 @@ namespace rEDH
         DeckList deckList;
 
         static string[] possibleTypes = { "Artifact", "Creature", "Enchantment", "Instant", "Land", "Planeswalker", "Sorcery" };
-        
+
         //The integers represent cmc. Example: each 1 is a card that costs 1 mana.
         //0 is the commander. Everything after this array will be lands.
         static int[] lowrangeCurve = {0,1,1,1,1,1,1,1,1,1,2,
@@ -26,7 +27,7 @@ namespace rEDH
                                       4,4,4,5,5};
         static int lowrangeLand = 34; //34 instead of 35 cuz we need room for commander
 
-        static int[] midrangeCurve = {};
+        static int[] midrangeCurve = { };
         static int midrangeLand;
 
         static int[] hirangeCurve = { };
@@ -36,7 +37,7 @@ namespace rEDH
         string commanderColorIdentitySearch;
         string colorIdentitySearch;
         string singletonCards;
-        public DeckBuilder() 
+        public DeckBuilder()
         {
             deckList = new DeckList();
         }
@@ -44,19 +45,21 @@ namespace rEDH
         {
             return deckList;
         }
-        public Card[] buildDeck(DatabaseWrangler dbWrangler, bool white, bool blue, bool black, bool red, bool green)
+        public Card[] buildDeck(DatabaseWrangler dbWrangler, bool white, bool blue, bool black, bool red, bool green, string format)
         {
 
             bool[] chosenColors = { white, blue, black, red, green };
-            
+
+            //establish the format we'll be building.
+            dbWrangler.setFormatSearchTerms(format);
 
             //Establish Commander first ---------------------------------------------------------------------------
             List<string> commanderIdentity = new List<string>();
-            if(white)
+            if (white)
             {
                 commanderIdentity.Add("W");
             }
-            if(blue)
+            if (blue)
             {
                 commanderIdentity.Add("U");
             }
@@ -68,45 +71,55 @@ namespace rEDH
             {
                 commanderIdentity.Add("R");
             }
-            if(green)
+            if (green)
             {
                 commanderIdentity.Add("G");
             }
 
-            deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true));
+            deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, format));
 
             //we're gonna exclude named cards from being generated twice
             dbWrangler.excludeCardNames(deckList.getCard(0).name);
             //-----------------------------------------------------------------------------------------------------
-            
+
             //Now for the 99
-            
+
             Random rndm = new Random();
             int random;
 
             for (int i = 1; i < 100; i++)
             {
-                
+
                 string[] cardColorIdentity = setColorIdentity(chosenColors);
 
-                random = rndm.Next(0,possibleTypes.Length);
-               
+                random = rndm.Next(0, possibleTypes.Length);
+                
+
                 //create cards on curve of random type and mana value.
-                if(i < lowrangeCurve.Length)
+                if (i < lowrangeCurve.Length)
                 {
-                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, possibleTypes[random], lowrangeCurve[i], false));
+                    Debug.WriteLine("Writing card...");
+                    try
+                    {
+                        deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, possibleTypes[random], lowrangeCurve[i], false, format));
+                    }
+                    catch(Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
+                    
                 }
                 //we are beyond the curve. create lands.
                 else
                 {
-                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false));
+                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false, format));
                 }
 
                 //if the name is "", then the card doesnt actually exist and will need to be retried until it does.
-                if(deckList.getCard(i).name.Equals(""))
+                if (deckList.getCard(i).name.Equals("") || deckList.getCard(i).card_type.Count() == 0)
                 {
-                    
-                    deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, dbWrangler));
+
+                    deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, dbWrangler, format));
                 }
 
                 dbWrangler.excludeCardNames(deckList.getCard(i).name);
@@ -170,164 +183,39 @@ namespace rEDH
 
             return tempIdentity.ToArray();
         }
-        private Card validateCard(Card toValidate, string[] possibleTypes, DatabaseWrangler dbWrangler)
+        private Card validateCard(Card toValidate, string[] possibleTypes, DatabaseWrangler dbWrangler, string format)
         {
+            //if this is true, we've run out of options. There are no more cardtypes in the cmc that
+            //will yield results.
+            if (possibleTypes.Length == 0)
+            {
+                //generate a random card in our color affinity and format. Who cares anymore.
+                toValidate = dbWrangler.queryCard(toValidate.color_identity, null, -1, false, format);
+                return toValidate;
+            }
+
             //possibleTypes is all the main card types a card can be.
             //we'll be narrowing down the list until it generates a card that exists.
             string[] currentOptions = possibleTypes;
             List<string> cardTypes = new List<string>(currentOptions);
-            
 
             //pick a random card type
             Random rndm = new Random();
             int random = rndm.Next(0, cardTypes.Count);
 
             //try again at generating this card.
-            toValidate = dbWrangler.queryCard(toValidate.color_identity, cardTypes.ElementAt(random), toValidate.cmc, false);
+            toValidate = dbWrangler.queryCard(toValidate.color_identity, cardTypes.ElementAt(random), toValidate.cmc, false, format);
 
             if (toValidate.name.Equals(""))
             {
-                cardTypes.Remove(toValidate.card_type[0]);
-                validateCard(toValidate, cardTypes.ToArray(), dbWrangler);
+
+                cardTypes.RemoveAt(random);
+                validateCard(toValidate, cardTypes.ToArray(), dbWrangler, format);
+
             }
 
             return toValidate;
         }
-        private void setColorIdentitySearchTerms(bool white, bool blue, bool black, bool red, bool green)
-        {
-            bool[] colors = { white, blue, black, red, green };
-           
-
-            //search tokens will be different depending on if the deck is monocolored or not.
-            int colorCount = 0;
-            foreach(bool color in colors)
-            {
-                if (color) { colorCount++; }
-            }
-
-            //monocolored
-            if (colorCount == 1)
-            {
-                commanderColorIdentitySearch = "colorIdentity LIKE ";
-                colorIdentitySearch = "colorIdentity LIKE ";
-
-                for (int i = 0; i < colors.Length; i++)
-                {
-                    if (colors[i])
-                    {
-                        switch (i)
-                        {
-                            case 0:
-                                commanderColorIdentitySearch += "'W'";
-                                colorIdentitySearch += "'W'";
-                                break;
-                            case 1:
-                                commanderColorIdentitySearch += "'U'";
-                                colorIdentitySearch += "'U'";
-                                break;
-                            case 2:
-                                commanderColorIdentitySearch += "'B'";
-                                colorIdentitySearch += "'B'";
-                                break;
-                            case 3:
-                                commanderColorIdentitySearch += "'R'";
-                                colorIdentitySearch += "'R'";
-                                break;
-                            case 4:
-                                commanderColorIdentitySearch += "'G'";
-                                colorIdentitySearch += "'R'";
-                                break;
-                        }
-
-                    }
-                }
-            }
-            //colorless
-            else if (colorCount == 0)
-            {
-                commanderColorIdentitySearch = "colorIdentity LIKE ''";
-                colorIdentitySearch = "colorIdentity LIKE ''";
-            }
-            //multicolored
-            else
-            {
-                commanderColorIdentitySearch = "";
-                colorIdentitySearch = "";
-
-                for (int i = 0; i < colors.Length; i++)
-                {
-                    //insert an AND inbetween each search token
-                    if (!commanderColorIdentitySearch.Equals(""))
-                    {
-                        commanderColorIdentitySearch += " AND ";
-                    }
-                    //---------------------------------------------
-
-                    //if the checkbox is unmarked
-                    if (!colors[i])
-                    {
-                        //insert an AND inbetween each search token. The regular search token uses only negative logic like
-                        //so the colorIdentitySearch is isolated to unmarked checkboxes. ex: cis NOT LIKE %U% AND NOT LIKE %R%
-                        if (!colorIdentitySearch.Equals(""))
-                        {
-                            colorIdentitySearch += " AND ";
-                        }
-
-                        commanderColorIdentitySearch += "colorIdentity NOT LIKE ";
-                        colorIdentitySearch += "colorIdentity NOT LIKE ";
-
-                        switch (i)
-                        {
-                            case 0:
-                                commanderColorIdentitySearch += "'%W%'";
-                                colorIdentitySearch += "'%W%'";
-                                break;
-                            case 1:
-                                commanderColorIdentitySearch += "'%U%'";
-                                colorIdentitySearch += "'%U%'";
-                                break;
-                            case 2:
-                                commanderColorIdentitySearch += "'%B%'";
-                                colorIdentitySearch += "'%B%'";
-                                break;
-                            case 3:
-                                commanderColorIdentitySearch += "'%R%'";
-                                colorIdentitySearch += "'%R%'";
-                                break;
-                            case 4:
-                                commanderColorIdentitySearch += "'%G%'";
-                                colorIdentitySearch += "'%G%'";
-                                break;
-                        }
-                    }
-                    //if the checkbox is marked
-                    else
-                    {
-                        commanderColorIdentitySearch += " colorIdentity LIKE ";
-
-                        switch (i)
-                        {
-                            case 0:
-                                commanderColorIdentitySearch += "'%W%'";
-                                break;
-                            case 1:
-                                commanderColorIdentitySearch += "'%U%'";
-                                break;
-                            case 2:
-                                commanderColorIdentitySearch += "'%B%'";
-                                break;
-                            case 3:
-                                commanderColorIdentitySearch += "'%R%'";
-                                break;
-                            case 4:
-                                commanderColorIdentitySearch += "'%G%'";
-                                break;
-                        }
-                    }
-                }
-            }
-        }
-
     }
          
 }

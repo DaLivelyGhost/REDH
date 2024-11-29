@@ -201,7 +201,6 @@ C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\hostfxr.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\hostpolicy.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\mscordaccore.dll
-C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\mscordaccore_amd64_amd64_8.0.724.31311.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\mscordbi.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\mscorrc.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\msquic.dll
@@ -251,3 +250,4 @@ C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\SQLitePCLRaw.provider.e_sqlite3.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\e_sqlite3.dll
 C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\obj\x64\Debug\net8.0-windows10.0.19041.0\win-x64\rEDH.sourcelink.json
+C:\Programming_Practice\RandomEDHDeck\RandomEDHDeck\rEDH\rEDH\bin\x64\Debug\net8.0-windows10.0.19041.0\win-x64\mscordaccore_amd64_amd64_8.0.1124.51707.dll

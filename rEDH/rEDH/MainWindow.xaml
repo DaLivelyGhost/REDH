@@ -17,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="9*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height=".7*"/>
         </Grid.RowDefinitions>
 
         <Border Grid.Column ="0" Background="#282828"/>
@@ -27,53 +27,59 @@
         <TextBlock Foreground="White" FontSize="30" Text="rEDH" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
         
-        <StackPanel Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2" Padding="10">
+        <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Padding="10">
 
-            <!--<DropDownButton HorizontalAlignment="Center" VerticalAlignment="Center" Content="Mana Range">
-                <Button Content="Low Range"></Button>
-            </DropDownButton>-->
-            
-            <TextBlock Foreground="White" FontSize="18" Text="Color Identity" HorizontalAlignment="Center"/>
+            <ComboBox  x:Name="formatComboBox" Header="Format" HorizontalAlignment="Left" PlaceholderText="format" Margin="20">
+                <x:String>EDH</x:String>
+                <x:String>Pauper Commander</x:String>
+                <x:String>PreDH</x:String>
+            </ComboBox>
+            <ComboBox x:Name="manacurveComboBox" Header="Mana Curve" HorizontalAlignment="Left" PlaceholderText="curve" Margin="20">
+                <x:String>Low Range</x:String>
+                <x:String>Mid Range</x:String>
+                <x:String>High Range</x:String>
+                <x:String>Oops all 1's!</x:String>
+            </ComboBox>
+            <TextBlock Foreground="White" FontSize="18" Text="Color Identity" HorizontalAlignment="Left" Margin="20"/>
 
-            <Grid x:Name="checkBoxGrid" HorizontalAlignment="Center">
+            <Grid x:Name="checkBoxGrid" HorizontalAlignment="Left" Background="#3f3f3f" Margin="20" Padding="5">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="5*"/>
-                    <RowDefinition Height="5*"/>
-                </Grid.RowDefinitions>
-
-                <TextBlock Foreground="White" FontSize="10*" Text="White" VerticalAlignment="Center"
-                           Grid.Column="0" Grid.Row="0"/>
-                <TextBlock Foreground="White" FontSize="10*" Text="Blue" VerticalAlignment="Center"
-                           Grid.Column="1" Grid.Row="0"/>
-                <TextBlock Foreground="White" FontSize="10*" Text="Black" VerticalAlignment="Center"
-                           Grid.Column="2" Grid.Row="0"/>
-                <TextBlock Foreground="White" FontSize="10*" Text="Red" VerticalAlignment="Center"
-                           Grid.Column="3" Grid.Row="0"/>
-                <TextBlock Foreground="White" FontSize="10*" Text="Green" VerticalAlignment="Center"
-                           Grid.Column="4" Grid.Row="0"/>
                 
-                <CheckBox x:Name="whiteCheckBox"
-                          Grid.Column="0" Grid.Row="1"/>
-                <CheckBox x:Name="blueCheckBox"
-                          Grid.Column="1" Grid.Row="1"/>
-                <CheckBox x:Name="blackCheckBox"
-                          Grid.Column="2" Grid.Row="1"/>
-                <CheckBox x:Name="redCheckBox"
-                          Grid.Column="3" Grid.Row="1"/>
-                <CheckBox x:Name="greenCheckBox"
-                          Grid.Column="4" Grid.Row="1"/>
+                <Grid Grid.Column="0">
+                    <TextBlock Foreground="White" FontSize="10*" Text="White" HorizontalAlignment="Center" Grid.Row="0"/>
+                    <CheckBox x:Name="whiteCheckBox" Grid.Row="1" VerticalAlignment="Center"/>
+                </Grid>
+                
+                <StackPanel Grid.Column="1">
+                    <TextBlock Foreground="White" FontSize="10*" Text="Blue" HorizontalAlignment="Center"/>
+                    <CheckBox x:Name="blueCheckBox" Width="5"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <TextBlock Foreground="White" FontSize="10*" Text="Black" HorizontalAlignment="Center"/>
+                    <CheckBox x:Name="blackCheckBox"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="3">
+                    <TextBlock Foreground="White" FontSize="10*" Text="Red" HorizontalAlignment="Center"/>
+                    <CheckBox x:Name="redCheckBox"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="4">
+                    <TextBlock Foreground="White" FontSize="10*" Text="Green" HorizontalAlignment="Center"/>
+                    <CheckBox x:Name="greenCheckBox"/>
+                </StackPanel>
 
             </Grid>
 
             <Button x:Name="generateButton" HorizontalAlignment="Center" 
-                    Content="Generate Deck" Foreground="Black" Background="#D3D3D3"
+                    Content="Generate Deck" Foreground="Black" Background="#D3D3D3" Margin="15"
                     Click="generateButtonClick">
 
             </Button>
@@ -81,20 +87,38 @@
 
         </StackPanel>
 
-        
-        <StackPanel VerticalAlignment="Center" Grid.Row="1" Padding="10">
-            <Button x:Name="databaseButton" HorizontalAlignment="Center"
+        <!--Bottom Panel-->
+        <Grid Grid.Row="1" Grid.ColumnSpan="2">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel VerticalAlignment="Center" Grid.Column="0" Padding="10">
+                <Button x:Name="databaseButton" HorizontalAlignment="Center"
                         Content="Update Database" Foreground="Black" Background="#8b8b8b"
                         Click="updateDatabaseButtonClick">
+                </Button>
+                <TextBlock x:Name="lastUpdatedText" Foreground="White" Text="Last Updated: " FontSize="10*" HorizontalAlignment="Center"/>
+            </StackPanel>
+            
+            
+            <ProgressBar x:Name="currTaskProgressBar" Value="100" Maximum="100" Grid.Column="1" HorizontalAlignment="Center"
+                         IsIndeterminate="True"/>
+
+
+            <Button x:Name="exportButton" HorizontalAlignment="Right" VerticalAlignment="Center" Grid.Column="2"
+                    Content="Export as .txt" Foreground="Black" Background="#8b8b8b">
+                
             </Button>
-            <TextBlock x:Name="lastUpdatedText" Foreground="White" Text="Last Updated: " FontSize="10*" HorizontalAlignment="Center"/>
-        </StackPanel>
+            
+        </Grid>
 
 
 
-
-
-
+        <!--2nd column: Card image grid and sort buttons -->
         <Grid Grid.Column="1" Padding="5">
 
             <Grid.RowDefinitions>

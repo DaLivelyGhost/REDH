@@ -17,6 +17,7 @@ using Windows.Foundation.Collections;
 using static System.Net.WebRequestMethods;
 using System.Drawing;
 using Microsoft.UI.Xaml.Media.Imaging;
+using Windows.Devices.Display.Core;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -44,15 +45,17 @@ namespace rEDH
         //-------Button Events--------------------------------------------
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
+            string format = formatComboBox.SelectedItem as string;
             Task<Card[]> deckTask = controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
-                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked);
+                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked, format);
             Card[] deckList = deckTask.Result;
 
             populateCardImages(deckList);
         }
         async void updateDatabaseButtonClick(object sender, RoutedEventArgs e)
         {
-           controller.updateDatabase();
+            controller.updateDatabase();
+            setUpdateTime();
         }
         async void nameSortButtonClick(object sender, RoutedEventArgs e)
         {
@@ -71,7 +74,14 @@ namespace rEDH
         public void setUpdateTime()
         {
             string timeUpdated = controller.getUpdateTime();
-            lastUpdatedText.Text = "Last Updated: " + timeUpdated;
+            
+            if (timeUpdated != null) {
+                lastUpdatedText.Text = "Last Updated: " + timeUpdated;
+            }
+            else
+            {
+                lastUpdatedText.Text = "Database not found";
+            }
         }
 
         public async void populateCardImages(Card[] cards)

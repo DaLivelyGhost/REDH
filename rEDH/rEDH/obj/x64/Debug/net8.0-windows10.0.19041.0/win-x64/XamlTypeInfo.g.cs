@@ -224,7 +224,7 @@ namespace rEDH.rEDH_XamlTypeInfo
 
         private void InitTypeTables()
         {
-            _typeNameTable = new string[30];
+            _typeNameTable = new string[33];
             _typeNameTable[0] = "Microsoft.UI.Xaml.Controls.XamlControlsResources";
             _typeNameTable[1] = "Microsoft.UI.Xaml.ResourceDictionary";
             _typeNameTable[2] = "Object";
@@ -249,14 +249,17 @@ namespace rEDH.rEDH_XamlTypeInfo
             _typeNameTable[21] = "Microsoft.UI.Xaml.Controls.ScrollingInteractionState";
             _typeNameTable[22] = "Single";
             _typeNameTable[23] = "Microsoft.UI.Xaml.Controls.ScrollingZoomMode";
-            _typeNameTable[24] = "rEDH.MainWindow";
-            _typeNameTable[25] = "Microsoft.UI.Xaml.Window";
-            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[24] = "Microsoft.UI.Xaml.Controls.ProgressBar";
+            _typeNameTable[25] = "Microsoft.UI.Xaml.Controls.Primitives.RangeBase";
+            _typeNameTable[26] = "Microsoft.UI.Xaml.Controls.ProgressBarTemplateSettings";
             _typeNameTable[27] = "Microsoft.UI.Xaml.DependencyObject";
-            _typeNameTable[28] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
-            _typeNameTable[29] = "Int32";
+            _typeNameTable[28] = "rEDH.MainWindow";
+            _typeNameTable[29] = "Microsoft.UI.Xaml.Window";
+            _typeNameTable[30] = "Microsoft.UI.Xaml.Controls.TreeViewNode";
+            _typeNameTable[31] = "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>";
+            _typeNameTable[32] = "Int32";
 
-            _typeTable = new global::System.Type[30];
+            _typeTable = new global::System.Type[33];
             _typeTable[0] = typeof(global::Microsoft.UI.Xaml.Controls.XamlControlsResources);
             _typeTable[1] = typeof(global::Microsoft.UI.Xaml.ResourceDictionary);
             _typeTable[2] = typeof(global::System.Object);
@@ -281,12 +284,15 @@ namespace rEDH.rEDH_XamlTypeInfo
             _typeTable[21] = typeof(global::Microsoft.UI.Xaml.Controls.ScrollingInteractionState);
             _typeTable[22] = typeof(global::System.Single);
             _typeTable[23] = typeof(global::Microsoft.UI.Xaml.Controls.ScrollingZoomMode);
-            _typeTable[24] = typeof(global::rEDH.MainWindow);
-            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Window);
-            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[24] = typeof(global::Microsoft.UI.Xaml.Controls.ProgressBar);
+            _typeTable[25] = typeof(global::Microsoft.UI.Xaml.Controls.Primitives.RangeBase);
+            _typeTable[26] = typeof(global::Microsoft.UI.Xaml.Controls.ProgressBarTemplateSettings);
             _typeTable[27] = typeof(global::Microsoft.UI.Xaml.DependencyObject);
-            _typeTable[28] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
-            _typeTable[29] = typeof(global::System.Int32);
+            _typeTable[28] = typeof(global::rEDH.MainWindow);
+            _typeTable[29] = typeof(global::Microsoft.UI.Xaml.Window);
+            _typeTable[30] = typeof(global::Microsoft.UI.Xaml.Controls.TreeViewNode);
+            _typeTable[31] = typeof(global::System.Collections.Generic.IList<global::Microsoft.UI.Xaml.Controls.TreeViewNode>);
+            _typeTable[32] = typeof(global::System.Int32);
         }
 
         private int LookupTypeIndexByName(string typeName)
@@ -324,7 +330,8 @@ namespace rEDH.rEDH_XamlTypeInfo
         private object Activate_0_XamlControlsResources() { return new global::Microsoft.UI.Xaml.Controls.XamlControlsResources(); }
         private object Activate_4_ScrollView() { return new global::Microsoft.UI.Xaml.Controls.ScrollView(); }
         private object Activate_19_ScrollPresenter() { return new global::Microsoft.UI.Xaml.Controls.Primitives.ScrollPresenter(); }
-        private object Activate_26_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
+        private object Activate_24_ProgressBar() { return new global::Microsoft.UI.Xaml.Controls.ProgressBar(); }
+        private object Activate_30_TreeViewNode() { return new global::Microsoft.UI.Xaml.Controls.TreeViewNode(); }
         private void MapAdd_0_XamlControlsResources(object instance, object key, object item)
         {
             var collection = (global::System.Collections.Generic.IDictionary<global::System.Object, global::System.Object>)instance;
@@ -332,7 +339,7 @@ namespace rEDH.rEDH_XamlTypeInfo
             var newItem = (global::System.Object)item;
             collection.Add(newKey, newItem);
         }
-        private void VectorAdd_28_IList(object instance, object item)
+        private void VectorAdd_31_IList(object instance, object item)
         {
             var collection = (global::System.Collections.Generic.ICollection<global::Microsoft.UI.Xaml.Controls.TreeViewNode>)instance;
             var newItem = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)item;
@@ -531,19 +538,43 @@ namespace rEDH.rEDH_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 24:   //  rEDH.MainWindow
+            case 24:   //  Microsoft.UI.Xaml.Controls.ProgressBar
+                userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Controls.Primitives.RangeBase"));
+                userType.Activator = Activate_24_ProgressBar;
+                userType.AddMemberName("IsIndeterminate");
+                userType.AddMemberName("ShowError");
+                userType.AddMemberName("ShowPaused");
+                userType.AddMemberName("TemplateSettings");
+                xamlType = userType;
+                break;
+
+            case 25:   //  Microsoft.UI.Xaml.Controls.Primitives.RangeBase
+                xamlType = new global::rEDH.rEDH_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 26:   //  Microsoft.UI.Xaml.Controls.ProgressBarTemplateSettings
+                userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
+                userType.SetIsReturnTypeStub();
+                xamlType = userType;
+                break;
+
+            case 27:   //  Microsoft.UI.Xaml.DependencyObject
+                xamlType = new global::rEDH.rEDH_XamlTypeInfo.XamlSystemBaseType(typeName, type);
+                break;
+
+            case 28:   //  rEDH.MainWindow
                 userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.Window"));
                 userType.SetIsLocalType();
                 xamlType = userType;
                 break;
 
-            case 25:   //  Microsoft.UI.Xaml.Window
+            case 29:   //  Microsoft.UI.Xaml.Window
                 xamlType = new global::rEDH.rEDH_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
 
-            case 26:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
+            case 30:   //  Microsoft.UI.Xaml.Controls.TreeViewNode
                 userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, GetXamlTypeByName("Microsoft.UI.Xaml.DependencyObject"));
-                userType.Activator = Activate_26_TreeViewNode;
+                userType.Activator = Activate_30_TreeViewNode;
                 userType.AddMemberName("Children");
                 userType.AddMemberName("Content");
                 userType.AddMemberName("Depth");
@@ -555,18 +586,14 @@ namespace rEDH.rEDH_XamlTypeInfo
                 xamlType = userType;
                 break;
 
-            case 27:   //  Microsoft.UI.Xaml.DependencyObject
-                xamlType = new global::rEDH.rEDH_XamlTypeInfo.XamlSystemBaseType(typeName, type);
-                break;
-
-            case 28:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
+            case 31:   //  System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>
                 userType = new global::rEDH.rEDH_XamlTypeInfo.XamlUserType(this, typeName, type, null);
-                userType.CollectionAdd = VectorAdd_28_IList;
+                userType.CollectionAdd = VectorAdd_31_IList;
                 userType.SetIsReturnTypeStub();
                 xamlType = userType;
                 break;
 
-            case 29:   //  Int32
+            case 32:   //  Int32
                 xamlType = new global::rEDH.rEDH_XamlTypeInfo.XamlSystemBaseType(typeName, type);
                 break;
             }
@@ -903,52 +930,87 @@ namespace rEDH.rEDH_XamlTypeInfo
             var that = (global::Microsoft.UI.Xaml.Controls.ScrollView)instance;
             that.ZoomMode = (global::Microsoft.UI.Xaml.Controls.ScrollingZoomMode)Value;
         }
-        private object get_36_TreeViewNode_Children(object instance)
+        private object get_36_ProgressBar_IsIndeterminate(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            return that.IsIndeterminate;
+        }
+        private void set_36_ProgressBar_IsIndeterminate(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            that.IsIndeterminate = (global::System.Boolean)Value;
+        }
+        private object get_37_ProgressBar_ShowError(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            return that.ShowError;
+        }
+        private void set_37_ProgressBar_ShowError(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            that.ShowError = (global::System.Boolean)Value;
+        }
+        private object get_38_ProgressBar_ShowPaused(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            return that.ShowPaused;
+        }
+        private void set_38_ProgressBar_ShowPaused(object instance, object Value)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            that.ShowPaused = (global::System.Boolean)Value;
+        }
+        private object get_39_ProgressBar_TemplateSettings(object instance)
+        {
+            var that = (global::Microsoft.UI.Xaml.Controls.ProgressBar)instance;
+            return that.TemplateSettings;
+        }
+        private object get_40_TreeViewNode_Children(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Children;
         }
-        private object get_37_TreeViewNode_Content(object instance)
+        private object get_41_TreeViewNode_Content(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Content;
         }
-        private void set_37_TreeViewNode_Content(object instance, object Value)
+        private void set_41_TreeViewNode_Content(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.Content = (global::System.Object)Value;
         }
-        private object get_38_TreeViewNode_Depth(object instance)
+        private object get_42_TreeViewNode_Depth(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Depth;
         }
-        private object get_39_TreeViewNode_HasChildren(object instance)
+        private object get_43_TreeViewNode_HasChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasChildren;
         }
-        private object get_40_TreeViewNode_HasUnrealizedChildren(object instance)
+        private object get_44_TreeViewNode_HasUnrealizedChildren(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.HasUnrealizedChildren;
         }
-        private void set_40_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
+        private void set_44_TreeViewNode_HasUnrealizedChildren(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.HasUnrealizedChildren = (global::System.Boolean)Value;
         }
-        private object get_41_TreeViewNode_IsExpanded(object instance)
+        private object get_45_TreeViewNode_IsExpanded(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.IsExpanded;
         }
-        private void set_41_TreeViewNode_IsExpanded(object instance, object Value)
+        private void set_45_TreeViewNode_IsExpanded(object instance, object Value)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             that.IsExpanded = (global::System.Boolean)Value;
         }
-        private object get_42_TreeViewNode_Parent(object instance)
+        private object get_46_TreeViewNode_Parent(object instance)
         {
             var that = (global::Microsoft.UI.Xaml.Controls.TreeViewNode)instance;
             return that.Parent;
@@ -1201,50 +1263,77 @@ namespace rEDH.rEDH_XamlTypeInfo
                 xamlMember.Getter = get_35_ScrollView_ZoomMode;
                 xamlMember.Setter = set_35_ScrollView_ZoomMode;
                 break;
+            case "Microsoft.UI.Xaml.Controls.ProgressBar.IsIndeterminate":
+                userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ProgressBar");
+                xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "IsIndeterminate", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_36_ProgressBar_IsIndeterminate;
+                xamlMember.Setter = set_36_ProgressBar_IsIndeterminate;
+                break;
+            case "Microsoft.UI.Xaml.Controls.ProgressBar.ShowError":
+                userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ProgressBar");
+                xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "ShowError", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_37_ProgressBar_ShowError;
+                xamlMember.Setter = set_37_ProgressBar_ShowError;
+                break;
+            case "Microsoft.UI.Xaml.Controls.ProgressBar.ShowPaused":
+                userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ProgressBar");
+                xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "ShowPaused", "Boolean");
+                xamlMember.SetIsDependencyProperty();
+                xamlMember.Getter = get_38_ProgressBar_ShowPaused;
+                xamlMember.Setter = set_38_ProgressBar_ShowPaused;
+                break;
+            case "Microsoft.UI.Xaml.Controls.ProgressBar.TemplateSettings":
+                userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.ProgressBar");
+                xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "TemplateSettings", "Microsoft.UI.Xaml.Controls.ProgressBarTemplateSettings");
+                xamlMember.Getter = get_39_ProgressBar_TemplateSettings;
+                xamlMember.SetIsReadOnly();
+                break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Children":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "Children", "System.Collections.Generic.IList`1<Microsoft.UI.Xaml.Controls.TreeViewNode>");
-                xamlMember.Getter = get_36_TreeViewNode_Children;
+                xamlMember.Getter = get_40_TreeViewNode_Children;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Content":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "Content", "Object");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_37_TreeViewNode_Content;
-                xamlMember.Setter = set_37_TreeViewNode_Content;
+                xamlMember.Getter = get_41_TreeViewNode_Content;
+                xamlMember.Setter = set_41_TreeViewNode_Content;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Depth":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "Depth", "Int32");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_38_TreeViewNode_Depth;
+                xamlMember.Getter = get_42_TreeViewNode_Depth;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasChildren":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "HasChildren", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_39_TreeViewNode_HasChildren;
+                xamlMember.Getter = get_43_TreeViewNode_HasChildren;
                 xamlMember.SetIsReadOnly();
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.HasUnrealizedChildren":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "HasUnrealizedChildren", "Boolean");
-                xamlMember.Getter = get_40_TreeViewNode_HasUnrealizedChildren;
-                xamlMember.Setter = set_40_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Getter = get_44_TreeViewNode_HasUnrealizedChildren;
+                xamlMember.Setter = set_44_TreeViewNode_HasUnrealizedChildren;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.IsExpanded":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "IsExpanded", "Boolean");
                 xamlMember.SetIsDependencyProperty();
-                xamlMember.Getter = get_41_TreeViewNode_IsExpanded;
-                xamlMember.Setter = set_41_TreeViewNode_IsExpanded;
+                xamlMember.Getter = get_45_TreeViewNode_IsExpanded;
+                xamlMember.Setter = set_45_TreeViewNode_IsExpanded;
                 break;
             case "Microsoft.UI.Xaml.Controls.TreeViewNode.Parent":
                 userType = (global::rEDH.rEDH_XamlTypeInfo.XamlUserType)GetXamlTypeByName("Microsoft.UI.Xaml.Controls.TreeViewNode");
                 xamlMember = new global::rEDH.rEDH_XamlTypeInfo.XamlMember(this, "Parent", "Microsoft.UI.Xaml.Controls.TreeViewNode");
-                xamlMember.Getter = get_42_TreeViewNode_Parent;
+                xamlMember.Getter = get_46_TreeViewNode_Parent;
                 xamlMember.SetIsReadOnly();
                 break;
             }

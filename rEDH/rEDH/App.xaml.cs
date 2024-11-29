@@ -68,9 +68,9 @@ namespace rEDH
             
         }
 
-        public async Task<Card[]> generateDeck(bool white, bool blue, bool black, bool red, bool green)
+        public async Task<Card[]> generateDeck(bool white, bool blue, bool black, bool red, bool green, string format)
         {
-            return deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green);       
+            return deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green, format);       
         }
         public async void updateDatabase()
         {
@@ -153,11 +153,11 @@ namespace rEDH
         }
         public string getUpdateTime()
         {
-            string updateTime = databaseWrangler.getTimeUpdated();
-            return updateTime;
+
             try
             {
-
+                string updateTime = databaseWrangler.getTimeUpdated();
+                return updateTime;
             }
             catch
             {

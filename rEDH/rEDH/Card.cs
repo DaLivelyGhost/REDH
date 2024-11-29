@@ -22,8 +22,9 @@ namespace rEDH
             mana_cost = "";
             color_identity = [""];
             type_line = "";
-
+            card_type = new List<string>();
             image_uris = new cardImages();
+            legalities = new formatLegalities();
         }
 
 
