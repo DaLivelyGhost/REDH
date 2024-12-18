@@ -37,7 +37,7 @@ namespace rEDH
         private const string orderToken = "order=name";
         private const string andToken = "&";
 
-        ProductInfoHeaderValue appInfo = new ProductInfoHeaderValue("rEDH", "0.3");
+        ProductInfoHeaderValue appInfo = new ProductInfoHeaderValue("rEDH", "0.6");
         MediaTypeWithQualityHeaderValue acceptInfo = new MediaTypeWithQualityHeaderValue("application/json");
         
         public ApiWrangler()

@@ -221,15 +221,23 @@ namespace rEDH
             //ex. WHERE colorIdentity LIKE 'G' and colorIdentity LIKE 'B'
             string colorSearchToken = setColorSearchTerms(colorIdentity);
 
-            string commandString;
+            string commandString = "";
             command = new SqliteCommand(null, connection);
 
             //if its our commander, then its the very first card we are adding to the deck, so we don't care about
             //cmc or making sure that it doesn't conflict with another card.
             if (isCommander)
             {
-                commandString = selectString + "Creature" + " WHERE isLegendary = 1 AND "
-                + colorSearchToken + " AND " + formatTokenString + " ORDER BY RANDOM() LIMIT 1;";
+                if(format.Equals("pauper"))
+                {
+
+                }
+                else
+                {
+                    commandString = selectString + "Creature" + " WHERE isLegendary = 1 AND "
+                    + colorSearchToken + " AND " + formatTokenString + " ORDER BY RANDOM() LIMIT 1;";
+                }
+
             }
             //The 99
             else if(cardType != null)

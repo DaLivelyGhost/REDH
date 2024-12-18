@@ -19,6 +19,7 @@ using System.Drawing;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Windows.Devices.Display.Core;
 
+
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
@@ -45,33 +46,122 @@ namespace rEDH
         //-------Button Events--------------------------------------------
         async void generateButtonClick(object sender, RoutedEventArgs e)
         {
+            currTaskProgressBar.Visibility = Visibility.Visible;
+            loadingText.Visibility = Visibility.Visible;
+            disableButtons();
+
             string format = formatComboBox.SelectedItem as string;
-            Task<Card[]> deckTask = controller.generateDeck((bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, (bool)blackCheckBox.IsChecked, 
-                                    (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked, format);
+            string manaCurve = manacurveComboBox.SelectedItem as string;
+            bool[] selectedColors = [(bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, 
+                (bool)blackCheckBox.IsChecked, (bool)redCheckBox.IsChecked, (bool)greenCheckBox.IsChecked];
+
+            DeckDefinitions definition = new DeckDefinitions(selectedColors, format, manaCurve);
+
+            Task<Card[]> deckTask = controller.generateDeck(definition);
             Card[] deckList = deckTask.Result;
 
-            populateCardImages(deckList);
+            await populateCardImages(deckList);
+            
+            await Task.Delay(10);
+
+            currTaskProgressBar.Visibility = Visibility.Collapsed;
+            loadingText.Visibility = Visibility.Collapsed;
+            enableButtons();
         }
         async void updateDatabaseButtonClick(object sender, RoutedEventArgs e)
         {
-            controller.updateDatabase();
-            setUpdateTime();
+            currTaskProgressBar.Visibility = Visibility.Visible;
+            loadingText.Visibility = Visibility.Visible;
+            disableButtons();
+
+            await controller.updateDatabase();
+            await setUpdateTime();
+
+            currTaskProgressBar.Visibility = Visibility.Collapsed;
+            loadingText.Visibility = Visibility.Collapsed;
+            enableButtons();
         }
         async void nameSortButtonClick(object sender, RoutedEventArgs e)
         {
-            populateCardImages(controller.sortByName());
+            currTaskProgressBar.Visibility = Visibility.Visible;
+            loadingText.Visibility = Visibility.Visible;
+            disableButtons();
+
+            await populateCardImages(controller.sortByName());
+
+            currTaskProgressBar.Visibility = Visibility.Collapsed;
+            loadingText.Visibility = Visibility.Collapsed;
+            enableButtons();
         }
         async void cmcSortButtonClick(object sender, RoutedEventArgs e)
         {
-            populateCardImages(controller.sortByCmc());
+            currTaskProgressBar.Visibility = Visibility.Visible;
+            loadingText.Visibility = Visibility.Visible;
+            disableButtons();
+
+            await populateCardImages(controller.sortByCmc());
+
+
+            currTaskProgressBar.Visibility = Visibility.Collapsed;
+            loadingText.Visibility = Visibility.Collapsed;
+            enableButtons();
         }
         async void typeSortButtonClick(object sender, RoutedEventArgs e)
         {
-            populateCardImages(controller.sortByType()); 
-        }
-        //-------End Button Events--------------------------------------
+            currTaskProgressBar.Visibility = Visibility.Visible;
+            loadingText.Visibility = Visibility.Visible;
+            disableButtons();
 
-        public void setUpdateTime()
+            await populateCardImages(controller.sortByType());
+
+            currTaskProgressBar.Visibility = Visibility.Collapsed;
+            loadingText.Visibility = Visibility.Collapsed;
+            enableButtons();
+        }
+        async void exportTextButtonClick(object sender, RoutedEventArgs e)
+        {
+            var savePicker = new Windows.Storage.Pickers.FileSavePicker();
+
+            var hwnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
+
+            WinRT.Interop.InitializeWithWindow.Initialize(savePicker, hwnd);
+
+            savePicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
+
+            //Save file as .txt
+            savePicker.FileTypeChoices.Add(".txt", new List<string>() { ".txt" });
+            savePicker.SuggestedFileName = "New Document";
+
+
+            Windows.Storage.StorageFile file = await savePicker.PickSaveFileAsync();
+
+            if(file != null)
+            {
+
+                Windows.Storage.CachedFileManager.DeferUpdates(file);
+
+                //change "file contents" to the decklist.
+                await Windows.Storage.FileIO.WriteTextAsync(file, controller.getDeckListString());
+
+                Windows.Storage.Provider.FileUpdateStatus status = await Windows.Storage.CachedFileManager.CompleteUpdatesAsync(file);
+
+                if(status == Windows.Storage.Provider.FileUpdateStatus.Complete)
+                {
+                    //update gui success
+                }
+                else
+                {
+                    //update gui file save failed
+                }
+            }
+            else
+            {
+                //update gui operation cancelled
+            }
+        }
+        //---------------------------------------------
+
+        public async Task setUpdateTime()
         {
             string timeUpdated = controller.getUpdateTime();
             
@@ -83,8 +173,25 @@ namespace rEDH
                 lastUpdatedText.Text = "Database not found";
             }
         }
-
-        public async void populateCardImages(Card[] cards)
+        private void disableButtons()
+        {
+            generateButton.IsEnabled = false;
+            databaseButton.IsEnabled = false;
+            cmcsortButton.IsEnabled = false;
+            namesortButton.IsEnabled = false;
+            typesortButton.IsEnabled = false;
+            exportButton.IsEnabled = false;
+        }
+        private void enableButtons()
+        {
+            generateButton.IsEnabled = true;
+            databaseButton.IsEnabled = true;
+            cmcsortButton.IsEnabled = true;
+            namesortButton.IsEnabled = true;
+            typesortButton.IsEnabled = true;
+            exportButton.IsEnabled = true;
+        }
+        public async Task populateCardImages(Card[] cards)
         {
             if(cards == null)
             {

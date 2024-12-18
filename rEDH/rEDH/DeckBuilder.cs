@@ -27,11 +27,21 @@ namespace rEDH
                                       4,4,4,5,5};
         static int lowrangeLand = 34; //34 instead of 35 cuz we need room for commander
 
+
         static int[] midrangeCurve = { };
         static int midrangeLand;
 
         static int[] hirangeCurve = { };
         static int hirangeLand;
+
+        static int[] onesCurve = {0,1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1,1,
+                                  1,1,1,1,1,1,1,1,1};
+        static int onesLand = 30;
 
         //commander has their own color identity search because they absolutely need to include all colors selected by user
         string commanderColorIdentitySearch;
@@ -45,38 +55,40 @@ namespace rEDH
         {
             return deckList;
         }
-        public Card[] buildDeck(DatabaseWrangler dbWrangler, bool white, bool blue, bool black, bool red, bool green, string format)
+        public Card[] buildDeck(DatabaseWrangler dbWrangler, DeckDefinitions definition)
         {
 
-            bool[] chosenColors = { white, blue, black, red, green };
-
             //establish the format we'll be building.
-            dbWrangler.setFormatSearchTerms(format);
+            dbWrangler.setFormatSearchTerms(definition.format);
+
+            //establish the mana curve we'll be using (only loosely adhered to)
+            int[] curve = setManaCurve(definition.manaCurve);
+
 
             //Establish Commander first ---------------------------------------------------------------------------
             List<string> commanderIdentity = new List<string>();
-            if (white)
+            if (definition.selectedColors[0])
             {
                 commanderIdentity.Add("W");
             }
-            if (blue)
+            if (definition.selectedColors[1])
             {
                 commanderIdentity.Add("U");
             }
-            if (black)
+            if (definition.selectedColors[2])
             {
                 commanderIdentity.Add("B");
             }
-            if (red)
+            if (definition.selectedColors[3])
             {
                 commanderIdentity.Add("R");
             }
-            if (green)
+            if (definition.selectedColors[4])
             {
                 commanderIdentity.Add("G");
             }
 
-            deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, format));
+            deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, definition.format));
 
             //we're gonna exclude named cards from being generated twice
             dbWrangler.excludeCardNames(deckList.getCard(0).name);
@@ -90,37 +102,44 @@ namespace rEDH
             for (int i = 1; i < 100; i++)
             {
 
-                string[] cardColorIdentity = setColorIdentity(chosenColors);
+                string[] cardColorIdentity = setColorIdentity(definition.selectedColors);
 
                 random = rndm.Next(0, possibleTypes.Length);
                 
 
                 //create cards on curve of random type and mana value.
-                if (i < lowrangeCurve.Length)
+                if (i < curve.Length)
                 {
                     Debug.WriteLine("Writing card...");
                     try
                     {
-                        deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, possibleTypes[random], lowrangeCurve[i], false, format));
+                        deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, possibleTypes[random], curve[i], false, definition.format));
                     }
                     catch(Exception e)
                     {
                         Debug.WriteLine(e);
                     }
-                    
+
+                    //if the name is "", then the card doesnt actually exist and will need to be retried until it does.
+                    if (deckList.getCard(i).name.Equals(""))
+                    {
+
+                        deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, curve[i], dbWrangler, definition.format));
+                    }
+
                 }
                 //we are beyond the curve. create lands.
                 else
                 {
-                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false, format));
+                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false, definition.format));
+
+                    //if somehow creating a land fails (don't ask me i'm just the programmer):
+                    if(deckList.getCard(i).name.Equals(""))
+                    {
+                        deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, 0, dbWrangler, definition.format));
+                    }
                 }
 
-                //if the name is "", then the card doesnt actually exist and will need to be retried until it does.
-                if (deckList.getCard(i).name.Equals("") || deckList.getCard(i).card_type.Count() == 0)
-                {
-
-                    deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, dbWrangler, format));
-                }
 
                 dbWrangler.excludeCardNames(deckList.getCard(i).name);
             }
@@ -183,14 +202,35 @@ namespace rEDH
 
             return tempIdentity.ToArray();
         }
-        private Card validateCard(Card toValidate, string[] possibleTypes, DatabaseWrangler dbWrangler, string format)
+        private int[] setManaCurve(string manaCurve)
+        {
+            int[] emptyCurve = new int[0];
+
+            switch (manaCurve)
+            {
+                case "Low Range":
+                    emptyCurve = lowrangeCurve;
+                    break;
+                case "Mid Range":
+                    break;
+                case "High Range":
+                    break;
+                case "Oops all 1's!":
+                    emptyCurve = onesCurve;
+                    break;
+
+            }
+            return emptyCurve;
+        }
+        private Card validateCard(Card toValidate, string[] possibleTypes, string[] colorIdentity, 
+            int cmc, DatabaseWrangler dbWrangler, string format)
         {
             //if this is true, we've run out of options. There are no more cardtypes in the cmc that
             //will yield results.
             if (possibleTypes.Length == 0)
             {
                 //generate a random card in our color affinity and format. Who cares anymore.
-                toValidate = dbWrangler.queryCard(toValidate.color_identity, null, -1, false, format);
+                toValidate = dbWrangler.queryCard(colorIdentity, null, cmc, false, format);
                 return toValidate;
             }
 
@@ -204,13 +244,13 @@ namespace rEDH
             int random = rndm.Next(0, cardTypes.Count);
 
             //try again at generating this card.
-            toValidate = dbWrangler.queryCard(toValidate.color_identity, cardTypes.ElementAt(random), toValidate.cmc, false, format);
+            toValidate = dbWrangler.queryCard(colorIdentity, cardTypes.ElementAt(random), cmc, false, format);
 
             if (toValidate.name.Equals(""))
             {
 
                 cardTypes.RemoveAt(random);
-                validateCard(toValidate, cardTypes.ToArray(), dbWrangler, format);
+                toValidate = validateCard(toValidate, cardTypes.ToArray(), colorIdentity,cmc,dbWrangler, format);
 
             }
 

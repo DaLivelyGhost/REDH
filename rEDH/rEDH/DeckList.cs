@@ -106,11 +106,22 @@ namespace rEDH
             {
                 for (int j = i + 1; j < Cards.Length; j++)
                 {
+                    //sort by type
                     if (String.Compare(Cards[i].card_type[0], Cards[j].card_type[0]) == 1)
                     {
                         Card temp = Cards[i];
                         Cards[i] = Cards[j];
                         Cards[j] = temp;
+                    }
+                    //types are the same, sort by name
+                    else if (String.Compare(Cards[i].card_type[0], Cards[j].card_type[0]) == 0)
+                    {
+                        if (String.Compare(Cards[i].name, Cards[j].name) == 1)
+                        {
+                            Card temp = Cards[i];
+                            Cards[i] = Cards[j];
+                            Cards[j] = temp;
+                        }
                     }
                 }
             }

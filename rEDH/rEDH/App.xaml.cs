@@ -68,11 +68,11 @@ namespace rEDH
             
         }
 
-        public async Task<Card[]> generateDeck(bool white, bool blue, bool black, bool red, bool green, string format)
+        public async Task<Card[]> generateDeck(DeckDefinitions definition)
         {
-            return deckBuilder.buildDeck(databaseWrangler, white, blue, black, red, green, format);       
+            return deckBuilder.buildDeck(databaseWrangler, definition);       
         }
-        public async void updateDatabase()
+        public async Task updateDatabase()
         {
             databaseWrangler.refreshTables();
 
@@ -165,7 +165,20 @@ namespace rEDH
             }
 
         }
+        public string getDeckListString()
+        {
+            string cards = "";
 
+            DeckList deckList = deckBuilder.getDeckList();
+
+            for(int i = 0; i < 100; i++)
+            {
+                cards += deckList.getCard(i).name;
+                cards += "\n";
+            }
+
+            return cards;
+        }
 
     }
 
