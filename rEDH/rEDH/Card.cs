@@ -22,6 +22,8 @@ namespace rEDH
             mana_cost = "";
             color_identity = [""];
             type_line = "";
+            rarity = "";
+            isLegendary = false;
             card_type = new List<string>();
             image_uris = new cardImages();
             legalities = new formatLegalities();
@@ -138,6 +140,9 @@ namespace rEDH
         }
         [JsonPropertyName("layout")]
         public string layout { get; set; }
+
+        [JsonPropertyName("rarity")]
+        public string rarity { get; set; }
 
         //----------------------------------------------------------------
         //Card Images

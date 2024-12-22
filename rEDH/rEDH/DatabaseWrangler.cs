@@ -29,9 +29,9 @@ namespace rEDH
 
         //Columns. If add/remove columns do it here.
         private static string tableDefinitionStrings = "name TEXT, cmc INT, manaCost TEXT, imageURI TEXT, isLegendary BOOLEAN, " +
-            "colorIdentity TEXT, cardType TEXT, edhLegal TEXT, pauperLegal TEXT ,predhLegal TEXT";
-        private static string tableColumns = "name, cmc, manaCost, imageURI, isLegendary, colorIdentity, cardType, edhLegal, pauperLegal, predhLegal";
-        private static string valuesString = "values ($name, $cmc, $manaCost, $imageURI, $isLegendary, $colorIdentity, $cardType, $edhLegal, $pauperLegal, $predhLegal)";
+            "colorIdentity TEXT, cardType TEXT, edhLegal TEXT, pauperLegal TEXT, predhLegal TEXT, rarity TEXT";
+        private static string tableColumns = "name, cmc, manaCost, imageURI, isLegendary, colorIdentity, cardType, edhLegal, pauperLegal, predhLegal, rarity";
+        private static string valuesString = "values ($name, $cmc, $manaCost, $imageURI, $isLegendary, $colorIdentity, $cardType, $edhLegal, $pauperLegal, $predhLegal, $rarity)";
         private static string foreignKeyString = "FOREIGN KEY (name) REFERENCES Master(name)";
         private void addParameters(Card c)
         {
@@ -45,6 +45,7 @@ namespace rEDH
             command.Parameters.AddWithValue("$edhLegal", c.legalities.commander);
             command.Parameters.AddWithValue("$pauperLegal", c.legalities.paupercommander);
             command.Parameters.AddWithValue("$predhLegal", c.legalities.predh);
+            command.Parameters.AddWithValue("$rarity", c.rarity);
         }
 
         //Command strings. 
@@ -57,14 +58,12 @@ namespace rEDH
         
         //command strings & variables for enforcing singleton.
         private string cardExclusionsString = "";
-        private string exclusionVariables = "";
         private List<string> excludedNames = new List<string>();
         private int excludedCardsCount = 0;
 
         //Tables. Every card will be inserted into "Master", and then inserted into each table that applies.
         //All tables except "all" has a foreign key that points to name column in "all". This keeps the data normalized.
         private static string masterString = "Master";
-        //private static string[] colorStrings = {"White","Blue", "Black", "Red", "Green", "Colorless" };
         private static string[] cardtypeStrings = {"Artifact", "Land", "Creature", "Enchantment", "Planeswalker",
                                                     "Sorcery", "Instant" };
         
@@ -228,9 +227,10 @@ namespace rEDH
             //cmc or making sure that it doesn't conflict with another card.
             if (isCommander)
             {
-                if(format.Equals("pauper"))
+                if(format.Equals("Pauper Commander"))
                 {
-
+                    commandString = selectString + "Creature" + " WHERE rarity LIKE 'uncommon' AND "
+                        + colorSearchToken + " ORDER BY RANDOM() LIMIT 1;";
                 }
                 else
                 {
@@ -242,18 +242,43 @@ namespace rEDH
             //The 99
             else if(cardType != null)
             {
-                commandString = selectString + cardType + " WHERE "
-                + colorSearchToken + " AND " + "cmc = " + cmc.ToString() + " AND " + cardExclusionsString + " AND " + formatTokenString 
-                + " ORDER BY RANDOM() LIMIT 1;";
-
+                //if generating a pauper deck, generate only common cards
+                //Yes, I know there are some cards that are uncommon that used to be common, but im tired and have no way of verifying those
+                if(format.Equals("Pauper Commander"))
+                {
+                    commandString = selectString + cardType + " WHERE "
+                    + colorSearchToken + " AND " + "cmc = " + cmc.ToString()
+                    + " AND " + "rarity LIKE 'common'"
+                    + " AND " + cardExclusionsString + " AND " + formatTokenString
+                    + " ORDER BY RANDOM() LIMIT 1;";
+                }
+                else
+                {
+                    commandString = selectString + cardType + " WHERE "
+                    + colorSearchToken + " AND " + "cmc = " + cmc.ToString() 
+                    + " AND " + cardExclusionsString + " AND " + formatTokenString
+                    + " ORDER BY RANDOM() LIMIT 1;";
+                }
                 addExcludedCardParameters();
             }
             //edge case for when validateCard has hit a wall. Generates a card in the format and color identity.
             //Shows no care for type or cmc.
             else
             {
-                commandString = selectString + masterString + " WHERE " + colorSearchToken
-                    + " AND " + cardExclusionsString + " AND " + formatTokenString + " ORDER BY RANDOM() LIMIT 1;";
+                //generate a common card if working in a pauper commander space.
+                if(format.Equals("Pauper Commander"))
+                {
+                    commandString = selectString + masterString + " WHERE " + colorSearchToken
+                    + " AND " + cardExclusionsString + " AND " + formatTokenString 
+                    + " AND " + "rarity LIKE 'common'" + " ORDER BY RANDOM() LIMIT 1;";
+                }
+                else
+                {
+                    commandString = selectString + masterString + " WHERE " + colorSearchToken
+                    + " AND " + cardExclusionsString + " AND " + formatTokenString 
+                    + " ORDER BY RANDOM() LIMIT 1;";
+                }
+
                 addExcludedCardParameters();
             }
 
@@ -296,6 +321,8 @@ namespace rEDH
                 newCard.legalities.commander = reader[7].ToString();
                 newCard.legalities.paupercommander = reader[8].ToString();
                 newCard.legalities.predh = reader[9].ToString();
+                //rarity
+                newCard.rarity = reader[10].ToString();
             }
 
             return newCard;
@@ -507,6 +534,10 @@ namespace rEDH
             }
 
             return toReturn;
+        }
+        public void resetSearchTerms()
+        {
+            cardExclusionsString = "";
         }
         public void closeDatabase()
         {

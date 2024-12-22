@@ -175,50 +175,6 @@ namespace rEDH
                 return null;
             }
         }
-        //Testing purposes only
-        public async Task<Card> testQuery()
-        {
-
-            var request = new HttpRequestMessage(HttpMethod.Get, "https://api.scryfall.com/cards/random");
-            var response = await httpClient.SendAsync(request);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                Card newCard = JsonConvert.DeserializeObject<Card>(jsonString);
-                
-                return newCard;
-                //demoDownloadCardArt(newCard, response);
-                
-            }
-            else
-            {
-                string error = response.StatusCode.ToString() + " " + response.ReasonPhrase.ToString();
-                Console.WriteLine(error);
-
-                return null;
-            }
-        }
-        //Testing purposes only
-        public async void demoDownloadCardArt(Card card, HttpResponseMessage response)
-        {
-            //create a temporary URI from the string that represents the link to the card image
-            var tempUri = new Uri(card.image_uris.normal);
-
-            //lop off the unnecessary parts
-            var uriWithoutQuery = tempUri.GetLeftPart(UriPartial.Path);
-            var fileExtension = Path.GetExtension(uriWithoutQuery);
-
-            //produce a directory path & file name for the image
-            string fileName = "newCard";
-            string directoryPath = "C:\\Programming_Practice\\RandomEDHDeck\\RandomEDHDeck\\rEDH\\rEDH";
-            var path = Path.Combine(directoryPath, $"{fileName}{fileExtension}");
-            //card.image_uris.setLocalAddress(path);
-
-            var imageBytes = await httpClient.GetByteArrayAsync(tempUri);
-            //await File.WriteAllBytesAsync(card.image_uris.getLocalAddress(), imageBytes);
-
-        }
 
     }
     /// <summary>

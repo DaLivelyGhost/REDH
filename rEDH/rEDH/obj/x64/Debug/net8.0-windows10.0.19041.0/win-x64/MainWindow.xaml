@@ -27,8 +27,10 @@
         <TextBlock Foreground="White" FontSize="30" Text="rEDH" 
                        HorizontalAlignment="Center" VerticalAlignment="Top"/>
         
+        
+        <!--User input Left side-->
         <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Padding="10">
-
+            
             <ComboBox x:ConnectionId='12'  x:Name="formatComboBox" Header="Format" HorizontalAlignment="Left" PlaceholderText="format" Margin="20">
                 <x:String>EDH</x:String>
                 <x:String>Pauper Commander</x:String>

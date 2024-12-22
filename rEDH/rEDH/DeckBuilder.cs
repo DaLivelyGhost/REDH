@@ -143,7 +143,8 @@ namespace rEDH
 
                 dbWrangler.excludeCardNames(deckList.getCard(i).name);
             }
-
+            //reset search terms when done.
+            dbWrangler.resetSearchTerms();
             //return to display.
             return deckList.getDeck();
         }
