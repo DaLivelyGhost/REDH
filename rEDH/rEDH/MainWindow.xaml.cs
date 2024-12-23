@@ -57,12 +57,25 @@ namespace rEDH
 
             DeckDefinitions definition = new DeckDefinitions(selectedColors, format, manaCurve);
 
-            Task<Card[]> deckTask = controller.generateDeck(definition);
-            Card[] deckList = deckTask.Result;
+            Task<Card[]> deckTask;
+            Card[] deckList = { };
+            try
+            {
+                deckTask = controller.generateDeck(definition);
+                deckList = deckTask.Result;
 
-            await populateCardImages(deckList);
-            
-            await Task.Delay(10);
+                await populateCardImages(deckList);
+
+                await Task.Delay(10);
+
+                generateFailText.Text = "";
+            }
+            catch (Exception ex)
+            {
+                generateFailText.Text = ex.Message;
+            }
+
+
 
             currTaskProgressBar.Visibility = Visibility.Collapsed;
             loadingText.Visibility = Visibility.Collapsed;
@@ -74,8 +87,17 @@ namespace rEDH
             loadingText.Visibility = Visibility.Visible;
             disableButtons();
 
-            await controller.updateDatabase();
-            await setUpdateTime();
+            try
+            {
+                await controller.updateDatabase();
+                await setUpdateTime();
+
+            }
+            catch (Exception ex)
+            {
+                lastUpdatedText.Text = ex.Message;
+            }
+
 
             currTaskProgressBar.Visibility = Visibility.Collapsed;
             loadingText.Visibility = Visibility.Collapsed;

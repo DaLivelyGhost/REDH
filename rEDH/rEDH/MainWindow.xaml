@@ -30,7 +30,7 @@
         
         <!--User input Left side-->
         <StackPanel Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Padding="10">
-            
+            <!--ComboBoxes-->
             <ComboBox  x:Name="formatComboBox" Header="Format" HorizontalAlignment="Left" PlaceholderText="format" Margin="20">
                 <x:String>EDH</x:String>
                 <x:String>Pauper Commander</x:String>
@@ -43,7 +43,7 @@
                 <x:String>Oops all 1's!</x:String>
             </ComboBox>
             
-            
+            <!--CheckBoxes-->
             <StackPanel Margin="20">
                 <TextBlock Foreground="White" FontSize="18" Text="Color Identity" HorizontalAlignment="Left" Margin="5"/>
                 
@@ -66,14 +66,16 @@
                 </Grid>
 
             </StackPanel>
-                
-            <Button x:Name="generateButton" HorizontalAlignment="Center" 
-                    Content="Generate Deck" Foreground="Black" Background="#D3D3D3" Margin="15"
-                    Click="generateButtonClick">
+            <!--Generate Button-->
+            <StackPanel Margin="20">
+                <Button x:Name="generateButton" HorizontalAlignment="Left" 
+                        Content="Generate Deck" Foreground="Black" Background="#D3D3D3"
+                        Click="generateButtonClick">
 
-            </Button>
-
-
+                </Button>
+                <TextBlock x:Name="generateFailText" Text="" Foreground="White" FontSize="10*" HorizontalAlignment="Center"
+                           LineStackingStrategy="MaxHeight" Width="200" TextWrapping="Wrap"/>
+            </StackPanel>
         </StackPanel>
 
         <!--Bottom Panel-->
@@ -99,7 +101,7 @@
 
                 <TextBlock x:Name="loadingText" HorizontalAlignment="Right" VerticalAlignment="Center"
                            Foreground="White" FontSize="15*" Visibility="Collapsed"
-                           Text="Not Test" Margin="10"/>
+                           Text="" Margin="10"/>
                 <ProgressBar x:Name="currTaskProgressBar" HorizontalAlignment="Right" VerticalAlignment="Center"
                         IsIndeterminate="True" Maximum="100" Minimum="0"
                         Width="1000" Height="40" Visibility="Collapsed"/>
