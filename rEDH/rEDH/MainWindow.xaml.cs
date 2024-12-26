@@ -40,7 +40,8 @@ namespace rEDH
             this.controller = controller;
 
             initializeCardImages();
-            setUpdateTime();
+
+            lastUpdatedText.Text = controller.getUpdateTime();
         }
 
         //-------Button Events--------------------------------------------
@@ -50,6 +51,7 @@ namespace rEDH
             loadingText.Visibility = Visibility.Visible;
             disableButtons();
 
+            //read inputs of checkboxes and comboboxes
             string format = formatComboBox.SelectedItem as string;
             string manaCurve = manacurveComboBox.SelectedItem as string;
             bool[] selectedColors = [(bool)whiteCheckBox.IsChecked, (bool)blueCheckBox.IsChecked, 
@@ -59,23 +61,21 @@ namespace rEDH
 
             Task<Card[]> deckTask;
             Card[] deckList = { };
-            try
-            {
-                deckTask = controller.generateDeck(definition);
-                deckList = deckTask.Result;
 
+            deckTask = controller.generateDeck(definition);
+            deckList = deckTask.Result;
+
+
+            if(deckList == null)
+            {
+                generateFailText.Text = "Database read failed!";
+            }
+            else
+            {
                 await populateCardImages(deckList);
 
                 await Task.Delay(10);
-
-                generateFailText.Text = "";
             }
-            catch (Exception ex)
-            {
-                generateFailText.Text = ex.Message;
-            }
-
-
 
             currTaskProgressBar.Visibility = Visibility.Collapsed;
             loadingText.Visibility = Visibility.Collapsed;
@@ -87,18 +87,13 @@ namespace rEDH
             loadingText.Visibility = Visibility.Visible;
             disableButtons();
 
-            try
-            {
-                await controller.updateDatabase();
-                await setUpdateTime();
+            
+            Task<string> updateStatus = controller.updateDatabase();
+            string status = await updateStatus;
 
-            }
-            catch (Exception ex)
-            {
-                lastUpdatedText.Text = ex.Message;
-            }
+            lastUpdatedText.Text = status;
 
-
+            
             currTaskProgressBar.Visibility = Visibility.Collapsed;
             loadingText.Visibility = Visibility.Collapsed;
             enableButtons();
@@ -183,7 +178,7 @@ namespace rEDH
         }
         //---------------------------------------------
 
-        public async Task setUpdateTime()
+        public async Task setUpdateTime(string updateTime)
         {
             string timeUpdated = controller.getUpdateTime();
             

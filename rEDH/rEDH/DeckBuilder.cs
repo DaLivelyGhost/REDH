@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,7 +56,7 @@ namespace rEDH
         {
             return deckList;
         }
-        public Card[] buildDeck(DatabaseWrangler dbWrangler, DeckDefinitions definition)
+        public async Task<Card[]> buildDeck(DatabaseWrangler dbWrangler, DeckDefinitions definition)
         {
 
             //establish the format we'll be building.
@@ -88,7 +89,14 @@ namespace rEDH
                 commanderIdentity.Add("G");
             }
 
-            deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, definition.format));
+            try
+            {
+                deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, definition.format));
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
 
             //we're gonna exclude named cards from being generated twice
             dbWrangler.excludeCardNames(deckList.getCard(0).name);
@@ -99,52 +107,56 @@ namespace rEDH
             Random rndm = new Random();
             int random;
 
-            for (int i = 1; i < 100; i++)
+            try
             {
-
-                string[] cardColorIdentity = setColorIdentity(definition.selectedColors);
-
-                random = rndm.Next(0, possibleTypes.Length);
-                
-
-                //create cards on curve of random type and mana value.
-                if (i < curve.Length)
+                for (int i = 1; i < 100; i++)
                 {
-                    Debug.WriteLine("Writing card...");
-                    try
+
+                    string[] cardColorIdentity = setColorIdentity(definition.selectedColors);
+
+                    random = rndm.Next(0, possibleTypes.Length);
+
+
+                    //create cards on curve of random type and mana value.
+                    if (i < curve.Length)
                     {
+
                         deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, possibleTypes[random], curve[i], false, definition.format));
+
+                        //if the name is "", then the card doesnt actually exist and will need to be retried until it does.
+                        if (deckList.getCard(i).name.Equals(""))
+                        {
+
+                            deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, curve[i], dbWrangler, definition.format, definition));
+
+                        }
+
                     }
-                    catch(Exception e)
+                    //we are beyond the curve. create lands.
+                    else
                     {
-                        Debug.WriteLine(e);
+
+                        deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false, definition.format));
+
+                        //if somehow creating a land fails (don't ask me i'm just the programmer):
+                        if (deckList.getCard(i).name.Equals(""))
+                        {
+                            deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, 0, dbWrangler, definition.format, definition));
+                        }
                     }
-
-                    //if the name is "", then the card doesnt actually exist and will need to be retried until it does.
-                    if (deckList.getCard(i).name.Equals(""))
-                    {
-
-                        deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, curve[i], dbWrangler, definition.format, definition));
-                    }
-
+                    dbWrangler.excludeCardNames(deckList.getCard(i).name);
                 }
-                //we are beyond the curve. create lands.
-                else
-                {
-                    deckList.setCard(i, dbWrangler.queryCard(cardColorIdentity, "Land", 0, false, definition.format));
-
-                    //if somehow creating a land fails (don't ask me i'm just the programmer):
-                    if(deckList.getCard(i).name.Equals(""))
-                    {
-                        deckList.setCard(i, validateCard(deckList.getCard(i), possibleTypes, cardColorIdentity, 0, dbWrangler, definition.format, definition));
-                    }
-                }
-
-
-                dbWrangler.excludeCardNames(deckList.getCard(i).name);
             }
-            //reset search terms when done.
-            dbWrangler.resetSearchTerms();
+            catch(Exception ex)
+            {
+                return null;
+            }
+            finally
+            {
+                //reset search terms when done.
+                dbWrangler.resetSearchTerms();
+            }
+
             //return to display.
             return deckList.getDeck();
         }
@@ -226,64 +238,34 @@ namespace rEDH
         private Card validateCard(Card toValidate, string[] possibleTypes, string[] colorIdentity, 
             int cmc, DatabaseWrangler dbWrangler, string format, DeckDefinitions definition)
         {
-            ////if this is true, we've run out of options. There are no more cardtypes in the cmc that
-            ////will yield results.
-            //if (possibleTypes.Length == 0)
-            //{
-            //    //generate a random card in our color affinity and format. Who cares anymore.
-            //    toValidate = dbWrangler.queryCard(colorIdentity, null, cmc, false, format);
-            //    return toValidate;
-            //}
-
-            ////possibleTypes is all the main card types a card can be.
-            ////we'll be narrowing down the list until it generates a card that exists.
-            //string[] currentOptions = possibleTypes;
-            //List<string> cardTypes = new List<string>(currentOptions);
-
-            ////pick a random card type
-            //Random rndm = new Random();
-            //int random = rndm.Next(0, cardTypes.Count);
-
-            ////try again at generating this card.
-            //toValidate = dbWrangler.queryCard(colorIdentity, cardTypes.ElementAt(random), cmc, false, format);
-
-            ////still failed. 
-            //if (toValidate.name.Equals(""))
-            //{
-
-            //    //cardTypes.RemoveAt(random);
-            //    toValidate = validateCard(toValidate, cardTypes.ToArray(), colorIdentity,cmc,dbWrangler, format, definition);
-
-            //}
-
-            //Reduce color pie options first
-            if(colorIdentity.Length == 0)
+            //if this is true, we've run out of options. There are no more cardtypes in the cmc that
+            //will yield results.
+            if (possibleTypes.Length == 0)
             {
-
+                //generate a random card in our color affinity and format. Who cares anymore.
+                toValidate = dbWrangler.queryCard(colorIdentity, null, cmc, false, format);
+                return toValidate;
             }
 
-            List<string> colorOptions = new List<string>(colorIdentity); 
-            
-            if(colorOptions.Count > 1)
-            {
-                colorOptions.RemoveAt(0);
+            //possibleTypes is all the main card types a card can be.
+            //we'll be narrowing down the list until it generates a card that exists.
+            string[] currentOptions = possibleTypes;
+            List<string> cardTypes = new List<string>(currentOptions);
 
-            }
-            else if(colorOptions.Count == 1)
-            {
-
-            }
-
+            //pick a random card type
             Random rndm = new Random();
-            int random = rndm.Next(0, possibleTypes.Length);
+            int random = rndm.Next(0, cardTypes.Count);
 
+            //try again at generating this card.
+            toValidate = dbWrangler.queryCard(colorIdentity, cardTypes.ElementAt(random), cmc, false, format);
 
-            toValidate = dbWrangler.queryCard(colorOptions.ToArray(), possibleTypes[random], cmc, false, format);
-
-            //we failed, go a layer deeper
-            if(toValidate.name.Equals(""))
+            //still failed. 
+            if (toValidate.name.Equals(""))
             {
-                toValidate = validateCard(toValidate, possibleTypes, colorIdentity, cmc, dbWrangler, format, definition);
+
+                //cardTypes.RemoveAt(random);
+                toValidate = validateCard(toValidate, cardTypes.ToArray(), colorIdentity, cmc, dbWrangler, format, definition);
+
             }
 
             return toValidate;

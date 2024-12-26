@@ -52,77 +52,21 @@ namespace rEDH
             httpClient.DefaultRequestHeaders.UserAgent.Add(appInfo);
             httpClient.DefaultRequestHeaders.Accept.Add(acceptInfo);
         }
-
+        
 
         //----Methods
-
-        public async Task<ApiList> queryCards(bool[] colorsToSearch)
+        public async Task<string> testConnection()
         {
-            /// <summary>
-            ///api.scryfall.com/cards/search + ? order=name + & + q=
-            ///</summary>
-            string requestString = searchURL + "?" + orderToken + andToken + queryToken;
-
-            bool multipleColors = false;
-
-            //for each color checked by the user
-            for(int i = 0; i < colorsToSearch.Length; i++)
-            {
-                //add a + inbetween colors in the query string
-                if(multipleColors && colorsToSearch[i])
-                {
-                    requestString += "+";
-                }
-
-
-                if (colorsToSearch[i])
-                {
-                    requestString += "c%3A";
-
-                    switch(i)
-                    {
-                        case 0:
-                            requestString += "white";
-                            multipleColors = true;
-                            break;
-                        case 1:
-                            requestString += "blue";
-                            multipleColors = true;
-                            break;
-                        case 2:
-                            requestString += "black";
-                            multipleColors = true;
-                            break;
-                        case 3:
-                            requestString += "red";
-                            multipleColors = true;
-                            break;
-                        case 4:
-                            requestString += "green";
-                            multipleColors = true;
-                            break;
-                    }
-                }
-            }
-            
-            //final query string
-            System.Diagnostics.Debug.WriteLine(requestString);
-
-            var request = new HttpRequestMessage(HttpMethod.Get, requestString);
+            var request = new HttpRequestMessage(HttpMethod.Connect, randomURL);
             var response = await httpClient.SendAsync(request);
 
             if(response.IsSuccessStatusCode)
             {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                this.apiList = JsonConvert.DeserializeObject<ApiList>(jsonString);
-
-                return this.apiList;
-            }
-            else
-            {
-                string error = response.StatusCode.ToString() + " " + response.ReasonPhrase.ToString();
                 return null;
             }
+
+            string error = response.StatusCode.ToString();
+            throw new Exception(error);
         }
         public async Task<ApiList> QueryFromURI(string queryString)
         {
@@ -166,7 +110,7 @@ namespace rEDH
                 else
                 {
                     string error = response.StatusCode.ToString();
-                    return null;
+                    throw new Exception(error);
                 }
             }
             else

@@ -74,7 +74,7 @@
 
                 </Button>
                 <TextBlock x:ConnectionId='15' x:Name="generateFailText" Text="" Foreground="White" FontSize="10*" HorizontalAlignment="Center"
-                           LineStackingStrategy="MaxHeight" Width="200" TextWrapping="Wrap"/>
+                           LineStackingStrategy="MaxHeight" Width="190" TextWrapping="Wrap"/>
             </StackPanel>
         </StackPanel>
 

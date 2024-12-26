@@ -70,15 +70,62 @@ namespace rEDH
 
         public async Task<Card[]> generateDeck(DeckDefinitions definition)
         {
-            return deckBuilder.buildDeck(databaseWrangler, definition);       
+            Task<Card[]> deckTask = deckBuilder.buildDeck(databaseWrangler, definition);
+            Card[] cards = await deckTask;
+
+            return cards;   
         }
-        public async Task updateDatabase()
+        public async Task<string> updateDatabase()
         {
-            databaseWrangler.refreshTables();
+            //if database file does not exist yet
+            if(!File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Assets\\cardDatabase.db"))
+            {
+                //test the connection to Scryfall by querying a single random card.
+                //if it fails, then we can't connect and should not build the database.
+                Task<string> connectionTestTask = apiWrangler.testConnection();
+                string connectionTest;
+                try
+                {
+                    connectionTest = await connectionTestTask;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+
+                databaseWrangler.createConnection();
+            }
+            //if the database file does exist
+            else
+            {
+                //test the connection to Scryfall by querying a single random card.
+                //if it fails, then we can't connect and should not build the database.
+                Task<string> connectionTestTask = apiWrangler.testConnection();
+                string connectionTest;
+                try
+                {
+                    connectionTest = await connectionTestTask;
+                }
+                catch (Exception ex)
+                {
+                    return ex.Message;
+                }
+
+
+                databaseWrangler.refreshTables();
+            }
 
             //get a byte array representing all the cards on scryfall
             Task<byte[]> byteArrayTask = apiWrangler.queryBulkData();
-            byte[] bytes = await byteArrayTask;
+            byte[] bytes;
+            try
+            {
+                bytes = await byteArrayTask;
+            }
+            catch(Exception ex)
+            {
+                return ex.Message;
+            }
 
             //get a local string to the assets folder
             string assetsDir = AppDomain.CurrentDomain.BaseDirectory + "Assets\\";
@@ -106,6 +153,8 @@ namespace rEDH
             string updateTime = DateTime.Now.ToString();
 
             databaseWrangler.setTimeUpdated(updateTime);
+            
+            return getUpdateTime();
         }
         public Card[] sortByName()
         {
@@ -157,11 +206,17 @@ namespace rEDH
             try
             {
                 string updateTime = databaseWrangler.getTimeUpdated();
-                return updateTime;
+
+                if(updateTime == null || updateTime.Equals(""))
+                {
+                    return "Database not found, or not initialized yet.";
+                }
+
+                return "Last updated: " + updateTime;
             }
             catch
             {
-                return null;
+                return "Database Not Found";
             }
 
         }

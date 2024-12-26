@@ -70,10 +70,16 @@ namespace rEDH
         //Constructor
         public DatabaseWrangler()
         {
+
+            
+        }
+        public void createConnection()
+        {
             string databaseDir = AppDomain.CurrentDomain.BaseDirectory + "Assets\\cardDatabase.db";
             connection = new SqliteConnection("Data Source=" + databaseDir);
             connection.Open();
-            
+
+            defineTables();
         }
 
         private void defineTables()
@@ -104,13 +110,6 @@ namespace rEDH
 
             string commandString;
 
-            //foreach (string color in colorStrings)
-            //{
-            //    commandString = dropString + color;
-            //    command = new SqliteCommand(commandString, connection);
-            //    command.ExecuteNonQuery();
-
-            //}
             foreach (string type in cardtypeStrings)
             {
                 commandString = dropString + type;
@@ -287,7 +286,9 @@ namespace rEDH
             command.CommandText = commandString;
 
             command.Prepare();
-            SqliteDataReader reader = command.ExecuteReader();
+            SqliteDataReader reader;
+
+            reader = command.ExecuteReader();
 
             Card newCard = new Card();
 
