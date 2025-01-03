@@ -82,16 +82,16 @@ namespace rEDH
             {
                 //test the connection to Scryfall by querying a single random card.
                 //if it fails, then we can't connect and should not build the database.
-                Task<string> connectionTestTask = apiWrangler.testConnection();
-                string connectionTest;
-                try
-                {
-                    connectionTest = await connectionTestTask;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Task<string> connectionTestTask = apiWrangler.testConnection();
+                //string connectionTest;
+                //try
+                //{
+                //    connectionTest = await connectionTestTask;
+                //}
+                //catch (Exception ex)
+                //{
+                //    return ex.Message;
+                //}
 
                 databaseWrangler.createConnection();
             }
@@ -100,16 +100,16 @@ namespace rEDH
             {
                 //test the connection to Scryfall by querying a single random card.
                 //if it fails, then we can't connect and should not build the database.
-                Task<string> connectionTestTask = apiWrangler.testConnection();
-                string connectionTest;
-                try
-                {
-                    connectionTest = await connectionTestTask;
-                }
-                catch (Exception ex)
-                {
-                    return ex.Message;
-                }
+                //Task<string> connectionTestTask = apiWrangler.testConnection();
+                //string connectionTest;
+                //try
+                //{
+                //    connectionTest = await connectionTestTask;
+                //}
+                //catch (Exception ex)
+                //{
+                //    return ex.Message;
+                //}
 
 
                 databaseWrangler.refreshTables();

@@ -68,24 +68,7 @@ namespace rEDH
             string error = response.StatusCode.ToString();
             throw new Exception(error);
         }
-        public async Task<ApiList> QueryFromURI(string queryString)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Get, queryString);
-            var response = await httpClient.SendAsync(request);
-
-            if(response.IsSuccessStatusCode)
-            {
-                var jsonString = await response.Content.ReadAsStringAsync();
-                this.apiList = JsonConvert.DeserializeObject<ApiList>(jsonString);
-
-                return this.apiList;
-            }
-            else
-            {
-                string error = response.StatusCode.ToString();
-                return null;
-            }
-        }
+      
         public async Task<byte[]> queryBulkData()
         {
             var request = new HttpRequestMessage(HttpMethod.Get, bulkURL);

@@ -7,6 +7,7 @@ using System.Collections.Specialized;
 using System.Data;
 using System.Data.Common;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -70,7 +71,10 @@ namespace rEDH
         //Constructor
         public DatabaseWrangler()
         {
-
+            if(File.Exists(AppDomain.CurrentDomain.BaseDirectory + "Assets\\cardDatabase.db"))
+            {
+                createConnection();            
+            }
             
         }
         public void createConnection()
@@ -179,7 +183,7 @@ namespace rEDH
                 if (!c.layout.Equals("art_series") && !c.layout.Equals("double_faced_token") && !c.layout.Equals("scheme")
                         && !c.layout.Equals("emblem") && !c.layout.Equals("token") && !c.layout.Equals("vanguard")
                          && !c.layout.Equals("augment") && !c.layout.Equals("meld") && !c.layout.Equals("transform")
-                         && !c.layout.Equals("modal_dfc"))
+                         && !c.layout.Equals("modal_dfc") && !c.mana_cost.Equals(""))
                 {
                     insertCard(c);
                 }

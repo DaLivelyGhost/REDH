@@ -12,7 +12,7 @@ namespace rEDH
         public DeckDefinitions() {
             format = "EDH";
             manaCurve = "Low Range";
-            selectedColors = [true, true, true, true, true];
+            selectedColors = ["W", "U", "B", "R", "G"];
         }
         public DeckDefinitions(bool[] SelectedColors, string Format, string ManaCurve)
         {
@@ -34,13 +34,40 @@ namespace rEDH
                 manaCurve = "Low Range";
             }
 
-            this.selectedColors = SelectedColors;
+            setSelectedColors(SelectedColors);
         }
 
 
         public string format {  get; set; }
         public string manaCurve { get; set; }
-        public bool[] selectedColors {  get; set; }
+        public string[] selectedColors {  get; set; }
 
+        private void setSelectedColors(bool[] colors)
+        {
+            List<string> deckColors = new List<string>();
+            
+            if (colors[0])
+            {
+                deckColors.Add("W");
+            }
+            if (colors[1])
+            {
+                deckColors.Add("U");
+            }
+            if (colors[2])
+            {
+                deckColors.Add("B");
+            }
+            if (colors[3])
+            {
+                deckColors.Add("R");
+            }
+            if (colors[4])
+            {
+                deckColors.Add("G");
+            }
+
+            selectedColors = deckColors.ToArray();
+        }
     }
 }

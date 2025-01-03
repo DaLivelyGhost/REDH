@@ -7,6 +7,7 @@ using System.Linq.Expressions;
 using System.Runtime.Intrinsics.Arm;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.ApplicationModel.Appointments.AppointmentsProvider;
 using Windows.Security.Cryptography.Core;
 
 namespace rEDH
@@ -26,14 +27,22 @@ namespace rEDH
                                       3,3,3,3,3,3,3,3,3,3,
                                       3,3,3,3,3,3,4,4,4,4,
                                       4,4,4,5,5};
-        static int lowrangeLand = 34; //34 instead of 35 cuz we need room for commander
 
 
-        static int[] midrangeCurve = { };
-        static int midrangeLand;
+        static int[] midrangeCurve = {0,1,1,1,1,1,1,2,2,2,2,
+                                      2,2,2,2,2,2,2,2,2,2,
+                                      3,3,3,3,3,3,3,3,3,3,
+                                      3,4,4,4,4,4,4,4,4,4,
+                                      4,4,5,5,5,5,5,5,5,5,
+                                      5,6,6,6,6,6,6,6,6,7,
+                                      7,8};
 
-        static int[] hirangeCurve = { };
-        static int hirangeLand;
+        static int[] hirangeCurve = {0,0,1,2,2,2,3,3,3,3,3,
+                                     3,3,3,3,3,4,4,4,4,4,
+                                     4,4,4,4,4,5,5,5,5,5,
+                                     5,5,5,5,5,5,5,5,5,6,
+                                     6,6,6,6,6,6,6,7,7,7,
+                                     7,7,7,7,7,8,8,8,10,10};
 
         static int[] onesCurve = {0,1,1,1,1,1,1,1,1,1,1,
                                   1,1,1,1,1,1,1,1,1,1,
@@ -42,12 +51,7 @@ namespace rEDH
                                   1,1,1,1,1,1,1,1,1,1,
                                   1,1,1,1,1,1,1,1,1,1,
                                   1,1,1,1,1,1,1,1,1};
-        static int onesLand = 30;
 
-        //commander has their own color identity search because they absolutely need to include all colors selected by user
-        string commanderColorIdentitySearch;
-        string colorIdentitySearch;
-        string singletonCards;
         public DeckBuilder()
         {
             deckList = new DeckList();
@@ -67,31 +71,12 @@ namespace rEDH
 
 
             //Establish Commander first ---------------------------------------------------------------------------
-            List<string> commanderIdentity = new List<string>();
-            if (definition.selectedColors[0])
-            {
-                commanderIdentity.Add("W");
-            }
-            if (definition.selectedColors[1])
-            {
-                commanderIdentity.Add("U");
-            }
-            if (definition.selectedColors[2])
-            {
-                commanderIdentity.Add("B");
-            }
-            if (definition.selectedColors[3])
-            {
-                commanderIdentity.Add("R");
-            }
-            if (definition.selectedColors[4])
-            {
-                commanderIdentity.Add("G");
-            }
+            //I set the commander identity rq here because it absolutely has to include EVERY selected color whereas every other
+            //card is optional
 
             try
             {
-                deckList.setCommander(dbWrangler.queryCard(commanderIdentity.ToArray(), "Creature", 0, true, definition.format));
+                deckList.setCommander(dbWrangler.queryCard(definition.selectedColors, "Creature", 0, true, definition.format));
             }
             catch(Exception ex)
             {
@@ -111,9 +96,8 @@ namespace rEDH
             {
                 for (int i = 1; i < 100; i++)
                 {
-
+                    //grab random color identity out of the possible options
                     string[] cardColorIdentity = setColorIdentity(definition.selectedColors);
-
                     random = rndm.Next(0, possibleTypes.Length);
 
 
@@ -160,56 +144,20 @@ namespace rEDH
             //return to display.
             return deckList.getDeck();
         }
-        private string[] setColorIdentity(bool[] chosenColors)
+        private string[] setColorIdentity(string[] chosenColors)
         {
             Random rndm = new Random();
             int rndmPick;
 
             List<string> tempIdentity = new List<string>();
 
-            //white
-            if (chosenColors[0])
+            //50% random chance to add each color in the color identity to the color identity of this card.
+            foreach(string color in chosenColors)
             {
-                rndmPick = rndm.Next(2);
-                if (rndmPick == 1)
+                rndmPick = rndm.Next(0, 2);
+                if(rndmPick == 1)
                 {
-                    tempIdentity.Add("W");
-                }
-            }
-            //blue
-            if (chosenColors[1])
-            {
-                rndmPick = rndm.Next(2);
-                if (rndmPick == 1)
-                {
-                    tempIdentity.Add("U");
-                }
-            }
-            //black
-            if (chosenColors[2])
-            {
-                rndmPick = rndm.Next(2);
-                if (rndmPick == 1)
-                {
-                    tempIdentity.Add("B");
-                }
-            }
-            //red
-            if (chosenColors[3])
-            {
-                rndmPick = rndm.Next(2);
-                if (rndmPick == 1)
-                {
-                    tempIdentity.Add("R");
-                }
-            }
-            //green
-            if (chosenColors[4])
-            {
-                rndmPick = rndm.Next(2);
-                if (rndmPick == 1)
-                {
-                    tempIdentity.Add("G");
+                    tempIdentity.Add(color);
                 }
             }
 
@@ -225,8 +173,10 @@ namespace rEDH
                     emptyCurve = lowrangeCurve;
                     break;
                 case "Mid Range":
+                    emptyCurve = midrangeCurve;
                     break;
                 case "High Range":
+                    emptyCurve = hirangeCurve;
                     break;
                 case "Oops all 1's!":
                     emptyCurve = onesCurve;
@@ -238,34 +188,53 @@ namespace rEDH
         private Card validateCard(Card toValidate, string[] possibleTypes, string[] colorIdentity, 
             int cmc, DatabaseWrangler dbWrangler, string format, DeckDefinitions definition)
         {
-            //if this is true, we've run out of options. There are no more cardtypes in the cmc that
-            //will yield results.
-            if (possibleTypes.Length == 0)
+
+            //try to test each card type against the current color pie for the card
+            toValidate = testCardTypes(toValidate, dbWrangler, toValidate.color_identity, possibleTypes, format);
+
+            //if that failed, then we need to go through the colors in the identity individually
+            if(toValidate.name.Equals(""))
             {
-                //generate a random card in our color affinity and format. Who cares anymore.
-                toValidate = dbWrangler.queryCard(colorIdentity, null, cmc, false, format);
+                foreach(string color in definition.selectedColors)
+                {
+                    string[] colorAsArray = { color };
+                    toValidate = testCardTypes(toValidate, dbWrangler, colorAsArray, possibleTypes, format);
+
+                    if(!toValidate.name.Equals(""))
+                    {
+                        return toValidate;
+                    }
+                }
+                //if we made it here, it means that everything has failed and we need to just generate a card.
+                toValidate = dbWrangler.queryCard(toValidate.color_identity, null, cmc, false, format);
+            }
+
+            return toValidate;
+        }
+
+        private Card testCardTypes(Card toValidate, DatabaseWrangler dbWrangler, string[] color, string[] possibleTypes,string format)
+        {
+            //since this is a recursive program, we need to catch 
+            if(possibleTypes.Length == 0)
+            {
                 return toValidate;
             }
 
-            //possibleTypes is all the main card types a card can be.
-            //we'll be narrowing down the list until it generates a card that exists.
-            string[] currentOptions = possibleTypes;
-            List<string> cardTypes = new List<string>(currentOptions);
+            //pick a random type to test
+            Random random = new Random();
+            int randomType = random.Next(0,possibleTypes.Length);
 
-            //pick a random card type
-            Random rndm = new Random();
-            int random = rndm.Next(0, cardTypes.Count);
+            toValidate = dbWrangler.queryCard(color, possibleTypes[randomType], toValidate.cmc, false, format);
 
-            //try again at generating this card.
-            toValidate = dbWrangler.queryCard(colorIdentity, cardTypes.ElementAt(random), cmc, false, format);
 
-            //still failed. 
-            if (toValidate.name.Equals(""))
+            //if it failed, then it's time to get recursive baybeeeee
+            if(toValidate.name.Equals(""))
             {
+                //remove the tested type from the array
+                List<string> remainingTypes = new List<string>(possibleTypes);
+                remainingTypes.RemoveAt(randomType);
 
-                //cardTypes.RemoveAt(random);
-                toValidate = validateCard(toValidate, cardTypes.ToArray(), colorIdentity, cmc, dbWrangler, format, definition);
-
+                toValidate = testCardTypes(toValidate, dbWrangler, color, remainingTypes.ToArray(), format);
             }
 
             return toValidate;
